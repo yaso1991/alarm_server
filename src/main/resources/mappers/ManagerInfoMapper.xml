@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.yaso91.alarm_server.mapper.ManagerInfoMapper">
+
+    <select id="selectManager" resultType="club.yaso91.alarm_server.entity.Manager">
+        select * from manager_info where username = #{username} and password = #{password}
+    </select>
+</mapper>
