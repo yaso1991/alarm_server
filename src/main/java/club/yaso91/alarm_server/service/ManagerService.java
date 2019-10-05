@@ -35,8 +35,7 @@ public class ManagerService {
      * @return: club.yaso91.alarm_server.entity.Manager
      * @throws:
      */
-    public Manager login(String username, String password)
-    {
+    public Manager login(String username, String password) {
         return managerInfoMapper.selectManager(username, password);
     }
 }
