@@ -8,10 +8,11 @@
 package club.yaso91.alarm_server.controller;
 
 import club.yaso91.alarm_server.entity.AlarmInfo;
+import club.yaso91.alarm_server.service.AlarmInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,9 +26,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/alarmInfo")
 public class AlarmInfoController {
+    @Autowired
+    private AlarmInfoService alarmInfoService;
 
+    @RequestMapping
     public List<AlarmInfo> getAlarmInfos() {
-        return null;
+        return alarmInfoService.getAlarmInfos();
     }
 
 }

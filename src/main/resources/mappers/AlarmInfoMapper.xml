@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.yaso91.alarm_server.mapper.AlarmInfoMapper">
+    <resultMap id="richAlarmInfo" type="club.yaso91.alarm_server.entity.AlarmInfo">
+        <id property="id" column="id"/>
+        <result property="alarming" column="alarming"/>
+        <result property="alarmSpan" column="alarm_span"/>
+        <result property="alarmTime" column="alarm_time"/>
+        <result property="name" column="name"/>
+        <result property="cardReaderId" column="card_reader_id"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="masterId" column="master_id"/>
+        <result property="pushLevel" column="push_level"/>
+        <result property="state" column="state"/>
+        <result property="type" column="type"/>
+        <association property="master" javaType="club.yaso91.alarm_server.entity.Employee">
+            <id property="id" column="m_id"/>
+            <result property="name" column="m_name"/>
+            <result property="workId" column="m_work_id"/>
+            <result property="position" column="m_position"/>
+            <result property="email" column="m_email"/>
+        </association>
+        <association property="employee" javaType="club.yaso91.alarm_server.entity.Employee">
+            <id property="id" column="e_id"/>
+            <result property="name" column="e_name"/>
+            <result property="workId" column="e_work_id"/>
+            <result property="position" column="e_position"/>
+            <result property="email" column="e_email"/>
+        </association>
+        <association property="cardReader" javaType="club.yaso91.alarm_server.entity.CardReader">
+            <id property="id" column="c_id"/>
+            <result property="name" column="c_name"/>
+            <result property="value" column="c_value"/>
+        </association>
+    </resultMap>
+    <select id="selectAlarmInfos" resultMap="richAlarmInfo">
+        select
+        a.*,
+        e.id as e_id,
+        e.name as e_name,
+        e.work_id as e_work_id,
+        e.position as e_position,
+        e.email as e_email,
+        m.id as m_id,
+        m.name as m_name,
+        m.work_id as m_work_id,
+        m.position as m_position,
+        m.email as m_email,
+        c.id as c_id,
+        c.name as c_name,
+        c.value as c_value
+        from
+            alarm_info  a
+        left outer join
+            employee_info  e
+        on
+            a.employee_id = e.id
+        left outer join
+            employee_info  m
+        on
+            a.master_id  = m.id
+        left outer join
+            card_reader_info  c
+        on
+            a.card_reader_id = c.id
+        ;
+    </select>
+</mapper>
