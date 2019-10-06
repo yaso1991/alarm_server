@@ -13,6 +13,8 @@
         <result property="pushLevel" column="push_level"/>
         <result property="state" column="state"/>
         <result property="type" column="type"/>
+        <result property="comPort" column="com_port"/>
+        <result property="modbusAddress" column="modbus_address"/>
         <association property="master" javaType="club.yaso91.alarm_server.entity.Employee">
             <id property="id" column="m_id"/>
             <result property="name" column="m_name"/>
