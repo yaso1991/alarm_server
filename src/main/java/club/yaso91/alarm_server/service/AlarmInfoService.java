@@ -45,6 +45,9 @@ public class AlarmInfoService {
 
     public boolean fixAlarmInfo(AlarmInfo alarmInfo) {
         return alarmInfoMapper.updateAlarmInfo(alarmInfo) == 1;
+    }
 
+    public boolean deleteAlarmInfos(ArrayList<Integer> ids) {
+        return alarmInfoMapper.deleteAlarmInfos(ids) != 0;
     }
 }

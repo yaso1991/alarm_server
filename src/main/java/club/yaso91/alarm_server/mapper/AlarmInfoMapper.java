@@ -11,4 +11,6 @@ public interface AlarmInfoMapper {
     ArrayList<AlarmInfo> selectAlarmInfos();
     int insertAlarmInfo(AlarmInfo alarmInfo);
     int updateAlarmInfo(AlarmInfo alarmInfo);
+
+    int deleteAlarmInfos(ArrayList<Integer> ids);
 }

@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
@@ -97,6 +99,24 @@ public class AlarmInfoControllerTest {
 
         MvcResult result = perform.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.handler().methodName("fixAlarmInfo"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        assertEquals("true",result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void deleteAlarmInfos() throws Exception {
+        ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(10);
+        ids.add(12);
+        ids.add(14);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/alarmInfo/deleteAlarmInfos")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JSON.toJSONString(ids));
+        ResultActions perform = mockMvc.perform(requestBuilder);
+
+        MvcResult result = perform.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.handler().methodName("deleteAlarmInfos"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
         assertEquals("true",result.getResponse().getContentAsString());

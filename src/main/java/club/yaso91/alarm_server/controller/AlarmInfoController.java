@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,6 +50,11 @@ public class AlarmInfoController {
     @RequestMapping(value="/fixAlarmInfo",method = RequestMethod.POST)
     public boolean fixAlarmInfo(@RequestBody AlarmInfo alarmInfo) {
         return alarmInfoService.fixAlarmInfo(alarmInfo);
+    }
+
+    @RequestMapping(value = "/deleteAlarmInfos",method = RequestMethod.POST)
+    public boolean deleteAlarmInfos(@RequestBody ArrayList<Integer> ids) {
+        return alarmInfoService.deleteAlarmInfos(ids);
     }
 }
 

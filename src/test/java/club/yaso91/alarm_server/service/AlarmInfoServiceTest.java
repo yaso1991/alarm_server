@@ -1,6 +1,7 @@
 package club.yaso91.alarm_server.service;
 
 import club.yaso91.alarm_server.entity.AlarmInfo;
+import club.yaso91.alarm_server.mapper.AlarmInfoMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -56,5 +62,16 @@ public class AlarmInfoServiceTest {
         alarmInfo.setState("维护");
         alarmInfo.setModbusAddress("40001");
         assertEquals(true, alarmInfoService.fixAlarmInfo(alarmInfo));
+    }
+
+    @Test
+    public void deleteAlarmInfos() {
+        ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(10);
+        ids.add(12);
+        ids.add(14);
+        assertEquals(true, alarmInfoService.deleteAlarmInfos(ids));
+
+
     }
 }

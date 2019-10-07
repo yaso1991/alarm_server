@@ -66,6 +66,16 @@
         where
             id = #{id}
     </update>
+    <delete id="deleteAlarmInfos">
+        delete from
+            alarm_info
+        where
+            id
+        in
+            <foreach index="index" item="item"  collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </delete>
     <select id="selectAlarmInfos" resultMap="richAlarmInfo">
         select
         a.*,
