@@ -35,6 +35,37 @@
             <result property="value" column="c_value"/>
         </association>
     </resultMap>
+    <insert id="insertAlarmInfo">
+        insert into
+            alarm_info(
+            name,
+            type,
+            card_reader_id,
+            com_port,
+            modbus_address
+            )
+        values (
+            #{name},
+            #{type},
+            #{cardReaderId},
+            #{comPort},
+            #{modbusAddress}
+        )
+
+    </insert>
+    <update id="updateAlarmInfo">
+        update
+            alarm_info
+        set
+            name = #{name},
+            type = #{type},
+            card_reader_id = #{cardReaderId},
+            state = #{state},
+            com_port = #{comPort},
+            modbus_address = #{modbusAddress}
+        where
+            id = #{id}
+    </update>
     <select id="selectAlarmInfos" resultMap="richAlarmInfo">
         select
         a.*,

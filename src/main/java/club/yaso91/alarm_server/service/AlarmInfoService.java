@@ -8,7 +8,9 @@
 package club.yaso91.alarm_server.service;
 
 import club.yaso91.alarm_server.entity.AlarmInfo;
+import club.yaso91.alarm_server.entity.CardReader;
 import club.yaso91.alarm_server.mapper.AlarmInfoMapper;
+import club.yaso91.alarm_server.mapper.CardReaderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +28,23 @@ import java.util.ArrayList;
 public class AlarmInfoService {
     @Autowired
     private AlarmInfoMapper alarmInfoMapper;
+    @Autowired
+    private CardReaderMapper cardReaderMapper;
 
     public ArrayList<AlarmInfo> getAlarmInfos() {
         return alarmInfoMapper.selectAlarmInfos();
+    }
+
+    public boolean addAlarmInfo(AlarmInfo alarmInfo) {
+        return alarmInfoMapper.insertAlarmInfo(alarmInfo) == 1;
+    }
+
+    public ArrayList<CardReader> loadCardReadersData() {
+        return cardReaderMapper.selectAll();
+    }
+
+    public boolean fixAlarmInfo(AlarmInfo alarmInfo) {
+        return alarmInfoMapper.updateAlarmInfo(alarmInfo) == 1;
+
     }
 }

@@ -8,9 +8,12 @@
 package club.yaso91.alarm_server.controller;
 
 import club.yaso91.alarm_server.entity.AlarmInfo;
+import club.yaso91.alarm_server.entity.CardReader;
 import club.yaso91.alarm_server.service.AlarmInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -33,6 +36,19 @@ public class AlarmInfoController {
     public List<AlarmInfo> getAlarmInfos() {
         return alarmInfoService.getAlarmInfos();
     }
+    @RequestMapping(value = "/addAlarmInfo",method = RequestMethod.POST)
+    public boolean addAlarmInfo(@RequestBody AlarmInfo alarmInfo) {
+        return alarmInfoService.addAlarmInfo(alarmInfo);
+    }
 
+    @RequestMapping("/loadCardReadersData")
+    public List<CardReader> loadCardReadersData() {
+        return alarmInfoService.loadCardReadersData();
+    }
+
+    @RequestMapping(value="/fixAlarmInfo",method = RequestMethod.POST)
+    public boolean fixAlarmInfo(@RequestBody AlarmInfo alarmInfo) {
+        return alarmInfoService.fixAlarmInfo(alarmInfo);
+    }
 }
 
