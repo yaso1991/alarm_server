@@ -54,7 +54,7 @@ public class AlarmInfoServiceTest {
     @Test
     public void fixAlarmInfo() {
         AlarmInfo alarmInfo = new AlarmInfo();
-        alarmInfo.setId(42);
+        alarmInfo.setId(32);
         alarmInfo.setCardReaderId(4);
         alarmInfo.setComPort("com4");
         alarmInfo.setName("83号报警点");

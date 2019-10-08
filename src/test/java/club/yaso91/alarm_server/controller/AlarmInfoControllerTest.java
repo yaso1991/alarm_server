@@ -1,6 +1,7 @@
 package club.yaso91.alarm_server.controller;
 
 import club.yaso91.alarm_server.entity.AlarmInfo;
+import club.yaso91.alarm_server.service.AlarmInfoService;
 import com.alibaba.fastjson.JSON;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,6 +53,7 @@ public class AlarmInfoControllerTest {
 
     @Test
     public void addAlarmInfo() throws Exception {
+
         AlarmInfo alarmInfo = new AlarmInfo();
         alarmInfo.setCardReaderId(4);
         alarmInfo.setComPort("com4");
@@ -86,7 +88,7 @@ public class AlarmInfoControllerTest {
     @Test
     public void fixAlarmInfo() throws Exception {
         AlarmInfo alarmInfo = new AlarmInfo();
-        alarmInfo.setId(42);
+        alarmInfo.setId(32);
         alarmInfo.setCardReaderId(4);
         alarmInfo.setComPort("com4");
         alarmInfo.setName("83号报警点");
