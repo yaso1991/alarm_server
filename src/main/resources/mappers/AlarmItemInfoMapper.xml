@@ -26,33 +26,44 @@
 
     <select id="selectSumInfos" resultMap="advAlarmItemInfo">
         select
-            ai.*,
-            a.id as a_id,
-            a.name as a_name,
-            e.id as e_id,
-            e.name as e_name,
-            e.work_id as e_work_id,
-            m.id as m_id,
-            m.name as m_name,
-            m.work_id as m_work_id
+        ai.*,
+        a.id as a_id,
+        a.name as a_name,
+        e.id as e_id,
+        e.name as e_name,
+        e.work_id as e_work_id,
+        m.id as m_id,
+        m.name as m_name,
+        m.work_id as m_work_id
         from
-            alarm_item_info ai
+        alarm_item_info ai
         left outer join
-            alarm_info a
+        alarm_info a
         on
-            ai.alarm_id = a.id
+        ai.alarm_id = a.id
         left outer join
-            employee_info as e
+        employee_info as e
         on
-            ai.employee_id = e.id
+        ai.employee_id = e.id
         left outer join
-            employee_info as m
+        employee_info as m
         on
-            ai.master_id = m.id
+        ai.master_id = m.id
+        <where>
+            <if test="beginTime != null and endTime != null">
+                <![CDATA[ai.alarm_start_time >= #{beginTime} and (FROM_UNIXTIME(UNIX_TIMESTAMP(ai.alarm_start_time) + ai.alarm_span)) < #{endTime}]]>
+            </if>
+            <if test="alarmName !='' and alarmName != null ">
+                and a.name = #{alarmName}
+            </if>
+            <if test="employeeName != '' and employeeName != null ">
+                and e.name =#{employeeName}
+            </if>
+
+        </where>
         order by
-            alarm_start_time
-        limit
-         ${(page-1)*size},${size}
+        alarm_start_time
+
     </select>
     <select id="selectCount" resultType="java.lang.Integer">
         select count(*) from alarm_item_info

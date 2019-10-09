@@ -36,7 +36,7 @@ public class AlarmInfoServiceTest {
     @Test
     public void getAlarmInfos() {
         assertEquals(true, alarmInfoService.getAlarmInfos() != null);
-        assertEquals("员工A", alarmInfoService.getAlarmInfos().get(0).getEmployee().getName());
+        assertEquals("员工B", alarmInfoService.getAlarmInfos().get(0).getEmployee().getName());
     }
 
     @Test

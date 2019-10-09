@@ -10,6 +10,7 @@ package club.yaso91.alarm_server.mapper;
 import club.yaso91.alarm_server.entity.AlarmItemInfo;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +23,7 @@ import java.util.ArrayList;
  **/
 @Repository
 public interface AlarmItemInfoMapper {
-    ArrayList<AlarmItemInfo> selectSumInfos(int page, int size);
+    ArrayList<AlarmItemInfo> selectSumInfos(Timestamp beginTime, Timestamp endTime, String alarmName, String employeeName);
 
     int selectCount();
 }

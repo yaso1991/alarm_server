@@ -17,6 +17,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -39,29 +43,18 @@ public class SumInfoControllerTest {
 
     @Test
     public void getSumInfos() throws Exception {
+
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/sumInfo/getSumInfos")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .param("page", "1");
+                .param("beginTime","2019-9-25 09:12:43.053")
+                .param("endTime","2019-9-27 09:12:43.053");
 
         MvcResult result = mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.handler().methodName("getSumInfos"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
-        assertEquals("1", result.getRequest().getParameter("page"));
         assertEquals(true, !result.getResponse().getContentAsString().isEmpty());
     }
 
-    @Test
-    public void getTotal() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/sumInfo/getTotal")
-                .contentType(MediaType.APPLICATION_JSON_UTF8);
-
-        MvcResult result = mockMvc.perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.handler().methodName("getTotal"))
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-        assertEquals(true, !result.getResponse().getContentAsString().isEmpty());
-    }
 }

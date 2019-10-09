@@ -1,5 +1,6 @@
 package club.yaso91.alarm_server.service;
 
+import club.yaso91.alarm_server.entity.AlarmItemInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,10 +9,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
+@RunWith(SpringRunner.class)
 @Transactional
 public class SumInfoServiceTest {
     @Autowired
@@ -23,7 +30,33 @@ public class SumInfoServiceTest {
 
     @Test
     public void getSumInfos() {
-        System.out.println(sumInfoService.getSumInfos(1));
-        assertEquals("7号线中轧测厚", sumInfoService.getSumInfos(1).get(1).getAlarmInfo().getName());
+        ArrayList<AlarmItemInfo> sumInfos = sumInfoService.getSumInfos(null, null, null, null);
+        System.out.println(sumInfos.toString());
+        assertEquals(true, !sumInfos.isEmpty());
+
+        Calendar calendarBegin = Calendar.getInstance();
+        calendarBegin.set(2019,8,25);
+        Timestamp begin = new Timestamp(calendarBegin.getTimeInMillis());
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.set(2019,8,28);
+        Timestamp end = new Timestamp(calendarEnd.getTimeInMillis());
+
+        sumInfos = sumInfoService.getSumInfos(begin, end, null, null);
+        System.out.println(sumInfos.toString());
+        assertEquals(true, !sumInfos.isEmpty());
+
+        sumInfos = sumInfoService.getSumInfos(null, null, "7号线中轧测厚", null);
+        System.out.println(sumInfos.toString());
+        assertEquals(true, !sumInfos.isEmpty());
+
+        sumInfos = sumInfoService.getSumInfos(null, null, null, "员工A");
+        System.out.println(sumInfos.toString());
+        assertEquals(true, !sumInfos.isEmpty());
+
+
+
+
+
+
     }
 }

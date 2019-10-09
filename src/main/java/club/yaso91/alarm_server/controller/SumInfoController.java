@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -29,13 +30,8 @@ public class SumInfoController {
     @Autowired
     private SumInfoService sumInfoService;
 
-    @RequestMapping("/getTotal")
-    public int getTotal(){
-        return sumInfoService.getTotal();
-    }
-
     @RequestMapping("/getSumInfos")
-    public ArrayList<AlarmItemInfo> getSumInfos(int page) {
-        return sumInfoService.getSumInfos(page);
+    public ArrayList<AlarmItemInfo> getSumInfos(Timestamp beginTime,Timestamp endTime, String alarmName, String employeeName) {
+        return sumInfoService.getSumInfos(beginTime,endTime,alarmName,employeeName);
     }
 }

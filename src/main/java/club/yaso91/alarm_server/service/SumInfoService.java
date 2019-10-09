@@ -12,6 +12,7 @@ import club.yaso91.alarm_server.mapper.AlarmItemInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -26,11 +27,9 @@ import java.util.ArrayList;
 public class SumInfoService {
     @Autowired
     AlarmItemInfoMapper alarmItemInfoMapper;
-    public ArrayList<AlarmItemInfo> getSumInfos(int page) {
-        return alarmItemInfoMapper.selectSumInfos(page,20);
+
+    public ArrayList<AlarmItemInfo> getSumInfos(Timestamp beginTime,Timestamp endTime,String alarmName,String employeeName) {
+        return alarmItemInfoMapper.selectSumInfos(beginTime,endTime,alarmName,employeeName);
     }
 
-    public int getTotal() {
-        return alarmItemInfoMapper.selectCount();
-    }
 }
