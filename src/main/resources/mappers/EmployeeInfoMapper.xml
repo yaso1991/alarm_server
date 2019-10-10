@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.yaso91.alarm_server.mapper.EmployeeInfoMapper">
+
+    <select id="selectAll" resultType="club.yaso91.alarm_server.entity.Employee">
+        select
+            id,
+            name,
+            work_id as workId,
+            position,
+            email
+        from
+            employee_info;
+    </select>
+</mapper>
