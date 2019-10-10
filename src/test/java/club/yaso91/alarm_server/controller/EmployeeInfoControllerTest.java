@@ -1,5 +1,6 @@
 package club.yaso91.alarm_server.controller;
 
+import club.yaso91.alarm_server.entity.Employee;
 import com.alibaba.fastjson.JSON;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +41,25 @@ public class EmployeeInfoControllerTest {
         MvcResult result = mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.handler().methodName("home"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        assertEquals(true,!result.getResponse().getContentAsString().isEmpty());
+    }
+
+    @Test
+    public void addEmployee() throws Exception {
+        Employee employee = new Employee();
+        employee.setName("员工C");
+        employee.setWorkId("123456789");
+        employee.setPosition("员工");
+        employee.setEmail("1721662545@qq.com");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/employeeInfo/addEmployee")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JSON.toJSONString(employee));
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.handler().methodName("addEmployee"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
         assertEquals(true,!result.getResponse().getContentAsString().isEmpty());

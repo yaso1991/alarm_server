@@ -23,4 +23,6 @@ import java.util.ArrayList;
 @Repository
 public interface EmployeeInfoMapper {
     ArrayList<Employee> selectAll();
+
+    int insertEmployee(Employee employee);
 }

@@ -30,4 +30,8 @@ public class EmployeeInfoService {
     public ArrayList<Employee> loadAllEmployees() {
         return employeeInfoMapper.selectAll();
     }
+
+    public boolean addEmployee(Employee employee) {
+        return employeeInfoMapper.insertEmployee(employee) == 1;
+    }
 }

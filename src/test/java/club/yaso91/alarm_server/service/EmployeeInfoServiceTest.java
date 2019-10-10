@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,5 +30,15 @@ public class EmployeeInfoServiceTest {
         ArrayList<Employee> employees = employeeInfoService.loadAllEmployees();
         assertEquals(true, !employees.isEmpty());
         assertEquals("组长1", employees.get(3).getName());
+    }
+
+    @Test
+    public void addEmployee() {
+        Employee employee = new Employee();
+        employee.setName("员工C");
+        employee.setWorkId("123456789");
+        employee.setPosition("员工");
+        employee.setEmail("1721662545@qq.com");
+        assertEquals(true, employeeInfoService.addEmployee(employee));
     }
 }
