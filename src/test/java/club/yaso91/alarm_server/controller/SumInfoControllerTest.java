@@ -43,7 +43,6 @@ public class SumInfoControllerTest {
 
     @Test
     public void getSumInfos() throws Exception {
-
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/sumInfo/getSumInfos")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .param("beginTime","2019-9-25 09:12:43.053")
@@ -57,4 +56,16 @@ public class SumInfoControllerTest {
         assertEquals(true, !result.getResponse().getContentAsString().isEmpty());
     }
 
+    @Test
+    public void exportSumInfos() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/sumInfo/exportSumInfos")
+                .contentType(MediaType.APPLICATION_JSON_UTF8);
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.handler().methodName("exportSumInfos"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        assertEquals(true, !result.getResponse().getContentAsString().isEmpty());
+    }
 }
