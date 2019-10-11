@@ -27,6 +27,16 @@
         where
             id = #{id}
     </update>
+    <delete id="deleteEmployees">
+        delete from
+            employee_info
+        where
+            id
+        in
+        <foreach collection="list" open="(" separator="," close=")" item="item" index="index" >
+           #{item}
+        </foreach>
+    </delete>
 
     <select id="selectAll" resultType="club.yaso91.alarm_server.entity.Employee">
         select

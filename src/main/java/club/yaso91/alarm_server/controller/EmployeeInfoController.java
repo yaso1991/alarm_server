@@ -47,4 +47,9 @@ public class EmployeeInfoController {
     public boolean fixEmployee(@RequestBody Employee employee) {
         return employeeInfoService.fixEmployee(employee);
     }
+
+    @RequestMapping(value = "deleteEmployees", method = RequestMethod.POST)
+    public boolean deleteEmployees(@RequestBody ArrayList<Integer> ids) {
+        return employeeInfoService.deleteEmployees(ids);
+    }
 }

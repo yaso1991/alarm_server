@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -80,6 +82,23 @@ public class EmployeeInfoControllerTest {
         MvcResult result = mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.handler().methodName("fixEmployee"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        assertEquals("true",result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void deleteEmployees() throws Exception {
+        ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(29);
+        ids.add(34);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/employeeInfo/deleteEmployees")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JSON.toJSONString(ids));
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.handler().methodName("deleteEmployees"))
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
         assertEquals("true",result.getResponse().getContentAsString());

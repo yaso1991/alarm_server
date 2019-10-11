@@ -38,4 +38,8 @@ public class EmployeeInfoService {
     public boolean fixEmployee(Employee employee) {
         return employeeInfoMapper.updateEmployee(employee) == 1;
     }
+
+    public boolean deleteEmployees(ArrayList<Integer> ids) {
+        return employeeInfoMapper.deleteEmployees(ids) != 0;
+    }
 }

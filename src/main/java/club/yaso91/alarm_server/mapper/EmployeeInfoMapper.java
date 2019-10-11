@@ -27,4 +27,6 @@ public interface EmployeeInfoMapper {
     int insertEmployee(Employee employee);
 
     int updateEmployee(Employee employee);
+
+    int deleteEmployees(ArrayList<Integer> ids);
 }
