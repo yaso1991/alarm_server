@@ -25,4 +25,6 @@ public interface EmployeeInfoMapper {
     ArrayList<Employee> selectAll();
 
     int insertEmployee(Employee employee);
+
+    int updateEmployee(Employee employee);
 }

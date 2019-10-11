@@ -64,4 +64,24 @@ public class EmployeeInfoControllerTest {
                 .andReturn();
         assertEquals(true,!result.getResponse().getContentAsString().isEmpty());
     }
+
+    @Test
+    public void fixEmployee() throws Exception {
+        Employee employee = new Employee();
+        employee.setId(34);
+        employee.setName("员工E");
+        employee.setWorkId("123456789");
+        employee.setPosition("员工");
+        employee.setEmail("1721662545@qq.com");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/employeeInfo/fixEmployee")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JSON.toJSONString(employee));
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.handler().methodName("fixEmployee"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        assertEquals("true",result.getResponse().getContentAsString());
+    }
 }

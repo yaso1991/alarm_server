@@ -34,4 +34,8 @@ public class EmployeeInfoService {
     public boolean addEmployee(Employee employee) {
         return employeeInfoMapper.insertEmployee(employee) == 1;
     }
+
+    public boolean fixEmployee(Employee employee) {
+        return employeeInfoMapper.updateEmployee(employee) == 1;
+    }
 }

@@ -42,4 +42,9 @@ public class EmployeeInfoController {
     public boolean addEmployee(@RequestBody Employee employee) {
         return employeeInfoService.addEmployee(employee);
     }
+
+    @RequestMapping(value = "/fixEmployee", method = RequestMethod.POST)
+    public boolean fixEmployee(@RequestBody Employee employee) {
+        return employeeInfoService.fixEmployee(employee);
+    }
 }

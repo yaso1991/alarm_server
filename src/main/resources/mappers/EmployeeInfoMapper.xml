@@ -16,6 +16,17 @@
             #{email}
         )
     </insert>
+    <update id="updateEmployee">
+        update
+            employee_info
+        set
+            name = #{name},
+            work_id  = #{workId},
+            position = #{position},
+            email = #{email}
+        where
+            id = #{id}
+    </update>
 
     <select id="selectAll" resultType="club.yaso91.alarm_server.entity.Employee">
         select
