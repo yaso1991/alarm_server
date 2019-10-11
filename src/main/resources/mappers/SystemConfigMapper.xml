@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.yaso91.alarm_server.mapper.SystemConfigMapper">
+    <update id="update">
+        update
+            system_config
+        set
+            monitor_push_delay = #{monitorPushDelay},
+            master_push_delay = #{masterPushDelay},
+            manager_push_delay = #{managerPushDelay},
+            sum_push_time = #{sumPushTime}
+        where
+            id = 1;
+    </update>
+
+    <select id="selectAll" resultType="club.yaso91.alarm_server.entity.SystemConfig">
+        select
+            id,
+            monitor_push_delay as monitorPushDelay,
+            master_push_delay as masterPushDelay,
+            manager_push_delay as ManagerPushDelay,
+            sum_push_time as sumPushTime
+        from
+            system_config
+    </select>
+</mapper>
