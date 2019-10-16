@@ -8,8 +8,9 @@
 package club.yaso91.alarm_server.config;
 
 import club.yaso91.alarm_server.security.LoginFailureHandler;
-import club.yaso91.alarm_server.security.LoginSuccessHandle;
+import club.yaso91.alarm_server.security.LoginSuccessHandler;
 import club.yaso91.alarm_server.security.NotLoginDeniedHandler;
+import club.yaso91.alarm_server.security.SuccessLogoutHandler;
 import club.yaso91.alarm_server.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +20,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @version: V1.0
@@ -62,11 +70,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .successHandler(new LoginSuccessHandle())
+                .successHandler(new LoginSuccessHandler())
                 .failureHandler(new LoginFailureHandler())
                 .and()
                 .logout()
                 .logoutUrl("/logout")
+                .logoutSuccessHandler(new SuccessLogoutHandler())
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
                 .permitAll()

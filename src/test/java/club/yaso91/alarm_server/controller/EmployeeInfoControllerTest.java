@@ -70,7 +70,7 @@ public class EmployeeInfoControllerTest {
     @Test
     public void fixEmployee() throws Exception {
         Employee employee = new Employee();
-        employee.setId(34);
+        employee.setId(28);
         employee.setName("员工E");
         employee.setWorkId("123456789");
         employee.setPosition("员工");
@@ -90,8 +90,8 @@ public class EmployeeInfoControllerTest {
     @Test
     public void deleteEmployees() throws Exception {
         ArrayList<Integer> ids = new ArrayList<>();
-        ids.add(29);
-        ids.add(34);
+        ids.add(28);
+        ids.add(27);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/employeeInfo/deleteEmployees")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JSON.toJSONString(ids));

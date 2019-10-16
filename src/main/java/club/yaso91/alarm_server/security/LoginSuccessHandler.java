@@ -27,7 +27,7 @@ import java.util.Map;
  * @description:登录成功的处理函数.
  * @data: 2019-10-16 14:42
  **/
-public class LoginSuccessHandle implements AuthenticationSuccessHandler {
+public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
