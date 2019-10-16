@@ -5,4 +5,12 @@
     <select id="selectManager" resultType="club.yaso91.alarm_server.entity.Manager">
         select * from manager_info where username = #{username} and password = #{password}
     </select>
+    <select id="selectUserByUsername" resultType="club.yaso91.alarm_server.entity.Manager">
+        select
+            *
+        from
+            manager_info
+        where
+            username = #{username}
+    </select>
 </mapper>

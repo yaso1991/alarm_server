@@ -8,8 +8,12 @@
 package club.yaso91.alarm_server.service;
 
 import club.yaso91.alarm_server.entity.Manager;
+import club.yaso91.alarm_server.entity.SystemConfig;
 import club.yaso91.alarm_server.mapper.ManagerInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,7 +25,7 @@ import org.springframework.stereotype.Service;
  * @data: 2019-10-05 11:35
  **/
 @Service
-public class ManagerService {
+public class ManagerService implements UserDetailsService {
     @Autowired
     ManagerInfoMapper managerInfoMapper;
 
@@ -37,5 +41,16 @@ public class ManagerService {
      */
     public Manager login(String username, String password) {
         return managerInfoMapper.selectManager(username, password);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Manager manager =  managerInfoMapper.selectUserByUsername(username);
+        if(manager == null) {
+            throw new UsernameNotFoundException("账户不存在.");
+        }
+        System.out.println(manager);
+        return  manager;
     }
 }
