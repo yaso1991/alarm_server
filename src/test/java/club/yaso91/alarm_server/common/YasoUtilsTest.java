@@ -12,6 +12,6 @@ public class YasoUtilsTest {
 
     @Test
     public void genarateBCryptPasswordEncoder() {
-        System.out.println(YasoUtils.genarateBCryptPasswordEncoder("123",4));
+        System.out.println(YasoUtils.genarateBCryptPasswordEncoder("user",4));
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +38,7 @@ public class SumInfoController {
     @Autowired
     private SumInfoService sumInfoService;
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/getSumInfos")
     public ArrayList<AlarmItemInfo> getSumInfos(Timestamp beginTime, Timestamp endTime, String alarmName, String employeeName) {
         return sumInfoService.getSumInfos(beginTime, endTime, alarmName, employeeName);
