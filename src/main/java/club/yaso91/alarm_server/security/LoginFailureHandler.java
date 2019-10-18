@@ -8,7 +8,6 @@
 package club.yaso91.alarm_server.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.devtools.restart.FailureHandler;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,8 +26,7 @@ import java.util.Map;
  * @author: Yaso
  * @className: LoginFailureHandler
  * @packageName: club.yaso91.alarm_server.security
- * @description:登录失败的处理.
- ** @data: 2019-10-16 14:45
+ * @description:登录失败的处理. * @data: 2019-10-16 14:45
  **/
 public class LoginFailureHandler implements AuthenticationFailureHandler {
     @Override
