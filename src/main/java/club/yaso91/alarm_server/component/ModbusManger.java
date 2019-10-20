@@ -7,6 +7,10 @@
  */
 package club.yaso91.alarm_server.component;
 
+import lombok.Data;
+
+import java.util.ArrayList;
+
 /**
  * @version: V1.0
  * @author: Yaso
@@ -15,18 +19,28 @@ package club.yaso91.alarm_server.component;
  * @description: 串口管理
  * @data: 2019-10-19 18:49
  **/
-public class ModbusManger {
 
-    private void initAlarmPoints() {
-//        int alarmPointIndex = 1;
-//        int ComIndex = 8;
-//        for (int i = 0; i < 44; i++) {
-//            AlarmPoint alarmPoint = new AlarmPoint("" + alarmPointIndex + "#报警点", "COM" + ComIndex);
-//            alarmPoints.add(alarmPoint);
-//            alarmPointIndex++;
-//            if (1 == i % 2) {
-//                ComIndex++;
-//            }
-//        }
+@Data
+public class ModbusManger {
+    private ArrayList<ModbusCom> coms = new ArrayList<>();
+
+    public ModbusManger() {
+        ModbusCom modbusCom = new ModbusCom("COM8");
+
+        modbusCom.addPoint(new ModbusPoint("1#报警点", 17, 2, 0, 1));
+        modbusCom.addPoint(new ModbusPoint("1#报警点数值", 17, 3, 0, 2));
+
+        coms.add(modbusCom);
+
+        for (ModbusCom com : coms) {
+            com.initAndOpenCOMS();
+        }
+    }
+
+
+    public void startCommunication() {
+        for (ModbusCom com : coms) {
+            com.comminucateWithModbus();
+        }
     }
 }

@@ -30,7 +30,7 @@ public class ModbusPoint {
      * @title: ModbusPoint
      * @author: Yaso
      * @date: 2019-10-20 8:02
-     * @description:
+     * @description:nihao
      * @param: name
      * @param: deviceId
      * @param: code

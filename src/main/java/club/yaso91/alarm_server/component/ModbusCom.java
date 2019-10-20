@@ -7,20 +7,18 @@
  */
 package club.yaso91.alarm_server.component;
 
+import com.alibaba.druid.sql.ast.statement.SQLIfStatement;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransaction;
-import com.ghgande.j2mod.modbus.msg.ReadInputDiscretesRequest;
-import com.ghgande.j2mod.modbus.msg.ReadInputDiscretesResponse;
+import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
 import com.ghgande.j2mod.modbus.net.SerialConnection;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -33,15 +31,14 @@ import java.util.HashMap;
  **/
 @Data
 public class ModbusCom {
-    private String name;
     AbstractSerialConnection com;
-    private HashMap<String,ModbusPoint> points = new HashMap<>();
+    private String name;
+    private HashMap<String, ModbusPoint> points = new HashMap<>();
 
 
     public ModbusCom(String name) {
         this.name = name;
     }
-
 
 
     public void initAndOpenCOMS() {
@@ -63,25 +60,53 @@ public class ModbusCom {
     }
 
     public void addPoint(ModbusPoint point) {
-        points.put(point.getName(),point);
+        points.put(point.getName(), point);
     }
 
     public void comminucateWithModbus() {
-        for(String key:points.keySet()) {
-            ReadInputDiscretesRequest req = new ReadInputDiscretesRequest(points.get(key).getRef(), points.get(key).getCount());
-            req.setUnitID(points.get(key).getDeviceId());
-            req.setHeadless();
-            ModbusSerialTransaction trans = new ModbusSerialTransaction(com);
-            trans.setRequest(req);
+        try {
+            for (String key : points.keySet()) {
+                ModbusPoint point = points.get(key);
+                ModbusRequest req = null;
+                int code = point.getCode();
+                int ref = point.getRef();
+                int count = point.getCount();
+                if (2 == code) {
+                    req = new ReadInputDiscretesRequest(ref, count);
+                } else if (3 == code) {
+                    req = new ReadMultipleRegistersRequest(ref, count);
+                } else {
 
-            try {
+                }
+
+                int deviceId = point.getDeviceId();
+                req.setUnitID(deviceId);
+                req.setUnitID(deviceId);
+                req.setHeadless();
+
+                ModbusSerialTransaction trans = new ModbusSerialTransaction(com);
+                trans.setRequest(req);
                 trans.execute();
-            } catch (ModbusException e) {
-                e.printStackTrace();
-            }
-            ReadInputDiscretesResponse res = (ReadInputDiscretesResponse) trans.getResponse();
-            points.get(key).setValue(String.valueOf(res.getDiscreteStatus(0)));
 
+                if (2 == code) {
+                    ReadInputDiscretesResponse res = (ReadInputDiscretesResponse) trans.getResponse();
+                    point.setValue(String.valueOf(res.getDiscreteStatus(0)));
+                } else if (3 == code) {
+                    ReadMultipleRegistersResponse res = (ReadMultipleRegistersResponse) trans.getResponse();
+
+                    byte[] message = res.getMessage();
+                    byte[] data = new byte[4];
+                    for (int i = 0; i < 4; i++) {
+                        data[i] = message[i + 1];
+                    }
+                    point.setValue(String.valueOf(ModbusUtil.registersToFloat(data)));
+                } else {
+
+                }
+
+            }
+        } catch (ModbusException e) {
+            e.printStackTrace();
         }
 
 
