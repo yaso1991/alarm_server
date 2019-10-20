@@ -32,7 +32,7 @@ import java.util.HashMap;
 public class ModbusCom implements Runnable {
     private String serialEncodingRtu = Modbus.SERIAL_ENCODING_RTU;
     private int stopbits = 1;
-    private String none = "None";
+    private String parity = "None";
     private int DATABITS = 8;
     private int rate = 9600;
     private AbstractSerialConnection com;
@@ -52,7 +52,7 @@ public class ModbusCom implements Runnable {
         params.setPortName(portName);
         params.setBaudRate(rate);
         params.setDatabits(DATABITS);
-        params.setParity(none);
+        params.setParity(parity);
         params.setStopbits(stopbits);
         params.setEncoding(serialEncodingRtu);
         params.setEcho(false);
@@ -103,7 +103,7 @@ public class ModbusCom implements Runnable {
                     byte[] message = res.getMessage();
                     byte[] data = new byte[4];
                     for (int i = 0; i < 4; i++) {
-                        data[i] = message[i + stopbits];
+                        data[i] = message[i + 1];
                     }
                     point.setValue(String.valueOf(ModbusUtil.registersToFloat(data)));
                 } else {
