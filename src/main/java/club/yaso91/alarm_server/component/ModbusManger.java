@@ -38,7 +38,7 @@ public class ModbusManger {
 
     public void startCommunication() {
         for (ModbusCom com : coms) {
-            Thread thread = new Thread(com,com.getName() + "_thread");
+            Thread thread = new Thread(com,com.getPortName() + "_thread");
             thread.start();
 
         }

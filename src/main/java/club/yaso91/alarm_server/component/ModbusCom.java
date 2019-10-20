@@ -30,30 +30,36 @@ import java.util.HashMap;
  **/
 @Data
 public class ModbusCom implements Runnable {
-    AbstractSerialConnection com;
-    private String name;
+    private String serialEncodingRtu = Modbus.SERIAL_ENCODING_RTU;
+    private int stopbits = 1;
+    private String none = "None";
+    private int DATABITS = 8;
+    private int rate = 9600;
+    private AbstractSerialConnection com;
+    private String portName;
     private HashMap<String, ModbusPoint> points = new HashMap<>();
+    private int millis = 500;
 
 
-    public ModbusCom(String name) {
-        this.name = name;
+    public ModbusCom(String portName) {
+        this.portName = portName;
     }
 
 
     public void initAndOpenCOMS() {
 
         SerialParameters params = new SerialParameters();
-        params.setPortName(name);
-        params.setBaudRate(9600);
-        params.setDatabits(8);
-        params.setParity("None");
-        params.setStopbits(1);
-        params.setEncoding(Modbus.SERIAL_ENCODING_RTU);
+        params.setPortName(portName);
+        params.setBaudRate(rate);
+        params.setDatabits(DATABITS);
+        params.setParity(none);
+        params.setStopbits(stopbits);
+        params.setEncoding(serialEncodingRtu);
         params.setEcho(false);
         com = new SerialConnection(params);
         try {
             com.open();
-            System.out.println(this.name + " open.");
+            System.out.println(this.portName + " open.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,7 +103,7 @@ public class ModbusCom implements Runnable {
                     byte[] message = res.getMessage();
                     byte[] data = new byte[4];
                     for (int i = 0; i < 4; i++) {
-                        data[i] = message[i + 1];
+                        data[i] = message[i + stopbits];
                     }
                     point.setValue(String.valueOf(ModbusUtil.registersToFloat(data)));
                 } else {
@@ -118,7 +124,7 @@ public class ModbusCom implements Runnable {
             System.out.println(Thread.currentThread().getName() + ":" + Thread.currentThread().getId());
             comminucateWithModbus();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(millis);
             } catch (Exception e) {
                 e.printStackTrace();
             }
