@@ -20,5 +20,11 @@ public class ModbusMangerTest {
     @Test
     public void startCommunication() {
         modbusManger.startCommunication();
+
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

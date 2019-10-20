@@ -7,7 +7,6 @@
  */
 package club.yaso91.alarm_server.component;
 
-import com.alibaba.druid.sql.ast.statement.SQLIfStatement;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransaction;
@@ -30,7 +29,7 @@ import java.util.HashMap;
  * @data: 2019-10-19 15:53
  **/
 @Data
-public class ModbusCom {
+public class ModbusCom implements Runnable {
     AbstractSerialConnection com;
     private String name;
     private HashMap<String, ModbusPoint> points = new HashMap<>();
@@ -54,6 +53,7 @@ public class ModbusCom {
         com = new SerialConnection(params);
         try {
             com.open();
+            System.out.println(this.name + " open.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,4 +112,17 @@ public class ModbusCom {
 
     }
 
+    @Override
+    public void run() {
+        while (true) {
+            System.out.println(Thread.currentThread().getName() + ":" + Thread.currentThread().getId());
+            comminucateWithModbus();
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }

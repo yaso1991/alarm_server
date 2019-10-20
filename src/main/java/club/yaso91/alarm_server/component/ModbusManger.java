@@ -26,21 +26,26 @@ public class ModbusManger {
 
     public ModbusManger() {
         ModbusCom modbusCom = new ModbusCom("COM8");
-
         modbusCom.addPoint(new ModbusPoint("1#报警点", 17, 2, 0, 1));
         modbusCom.addPoint(new ModbusPoint("1#报警点数值", 17, 3, 0, 2));
-
         coms.add(modbusCom);
+        coms.add(new ModbusCom("COM9"));
 
         for (ModbusCom com : coms) {
             com.initAndOpenCOMS();
         }
     }
 
-
     public void startCommunication() {
         for (ModbusCom com : coms) {
-            com.comminucateWithModbus();
+            Thread thread = new Thread(com,com.getName() + "_thread");
+            thread.start();
+
         }
+    }
+
+    public static void main(String[] args) {
+        ModbusManger modbusManger = new ModbusManger();
+        modbusManger.startCommunication();
     }
 }
