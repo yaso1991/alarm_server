@@ -44,8 +44,4 @@ public class ModbusManger {
         }
     }
 
-    public static void main(String[] args) {
-        ModbusManger modbusManger = new ModbusManger();
-        modbusManger.startCommunication();
-    }
 }
