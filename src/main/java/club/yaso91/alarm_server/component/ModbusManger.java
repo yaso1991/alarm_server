@@ -10,6 +10,8 @@ package club.yaso91.alarm_server.component;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @version: V1.0
@@ -37,10 +39,21 @@ public class ModbusManger {
     }
 
     public void startCommunication() {
+        ExecutorService executorService = Executors.newCachedThreadPool();
         for (ModbusCom com : coms) {
-            Thread thread = new Thread(com,com.getPortName() + "_thread");
-            thread.start();
-
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        com.comminucateWithModbus();
+                        try {
+                            Thread.sleep(com.getMillis());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
         }
     }
 

@@ -29,11 +29,11 @@ import java.util.HashMap;
  * @data: 2019-10-19 15:53
  **/
 @Data
-public class ModbusCom implements Runnable {
+public class ModbusCom  {
     private String serialEncodingRtu = Modbus.SERIAL_ENCODING_RTU;
-    private int stopbits = 1;
+    private int stopBits = 1;
     private String parity = "None";
-    private int DATABITS = 8;
+    private int dataBits = 8;
     private int rate = 9600;
     private AbstractSerialConnection com;
     private String portName;
@@ -51,9 +51,9 @@ public class ModbusCom implements Runnable {
         SerialParameters params = new SerialParameters();
         params.setPortName(portName);
         params.setBaudRate(rate);
-        params.setDatabits(DATABITS);
+        params.setDatabits(dataBits);
         params.setParity(parity);
-        params.setStopbits(stopbits);
+        params.setStopbits(stopBits);
         params.setEncoding(serialEncodingRtu);
         params.setEcho(false);
         com = new SerialConnection(params);
@@ -114,21 +114,5 @@ public class ModbusCom implements Runnable {
         } catch (ModbusException e) {
             e.printStackTrace();
         }
-
-
-    }
-
-    @Override
-    public void run() {
-        while (true) {
-            System.out.println(Thread.currentThread().getName() + ":" + Thread.currentThread().getId());
-            comminucateWithModbus();
-            try {
-                Thread.sleep(millis);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 }
