@@ -7,6 +7,7 @@
  */
 package club.yaso91.alarm_server.service;
 
+import club.yaso91.alarm_server.component.EmailSender;
 import club.yaso91.alarm_server.component.ModbusCom;
 import club.yaso91.alarm_server.component.ModbusManger;
 import club.yaso91.alarm_server.component.ModbusPoint;
@@ -38,6 +39,9 @@ public class AlarmStateService {
     @Autowired
     private AlarmItemInfoMapper alarmItemInfoMapper;
 
+    @Autowired
+    private EmailSender emailSender;
+
     public AlarmStateService() {
         boot();
     }
@@ -54,30 +58,55 @@ public class AlarmStateService {
             for (String key : points.keySet()) {
                 ModbusPoint point = points.get(key);
                 String current = point.getValue();
-                System.out.println(point.getName() + ":" + current);
 
                 //检测到故障
-                if (current == "true") {
+                if (current.equals("true")) {
                     AlarmInfo alarmInfo = alarmInfoMapper.find(com.getPortName(), point.getName());
                     AlarmItemInfo alarmItemInfo = new AlarmItemInfo();
                     //刚发生报警
                     if (alarmInfo.getAlarmTime() == null) {
                         alarmInfo.setAlarmTime(new Timestamp(System.currentTimeMillis()));
+                        alarmInfo.setAlarming(true);
                         alarmInfoMapper.updateStateAlarmed(alarmInfo);
                         setItemInfo(alarmInfo, alarmItemInfo);
                         alarmItemInfoMapper.insert(alarmItemInfo);
                         continue;
                     }
 
+
                     //持续发生报警
-                    alarmInfoMapper.updateStateIsErring(alarmInfo);
+                    //报警推送
+                    if (alarmInfo.getAlarmSpan() >= 20 && alarmInfo.getPushLevel().equals("未推送")) {
+                        alarmInfo.setPushLevel("班组长级");
+                        emailSender.sendPushMail("1441825297@qq.com", "1721662545@qq.com",
+                                "发生班组长级报警推送",
+                                new Timestamp(System.currentTimeMillis()).toString()
+                                        + ":" + point.getName() + "发生班组长级推送.");
+                    } else if (alarmInfo.getAlarmSpan() >= 40 && alarmInfo.getPushLevel().equals("班组长级")) {
+                        alarmInfo.setPushLevel("主任级");
+                        emailSender.sendPushMail("1441825297@qq.com", "1721662545@qq.com",
+                                "发生主任级报警推送",
+                                new Timestamp(System.currentTimeMillis()).toString()
+                                        + ":" + point.getName() + "发生主任级推送.");
+
+                    } else if (alarmInfo.getAlarmSpan() >= 60 && alarmInfo.getPushLevel().equals("主任级")) {
+                        alarmInfo.setPushLevel("经理级");
+                        emailSender.sendPushMail("1441825297@qq.com", "1721662545@qq.com",
+                                "发生班经理级报警推送",
+                                new Timestamp(System.currentTimeMillis()).toString()
+                                        + ":" + point.getName() + "发生经理级推送.");
+                    } else {
+
+                    }
+
+                    alarmInfoMapper.updateAlarming(alarmInfo);
                     setItemInfo(alarmInfo, alarmItemInfo);
                     alarmItemInfoMapper.update(alarmItemInfo);
                     continue;
                 }
 
                 //检测为正常
-                if (current == "false") {
+                if (current.equals("false")) {
                     alarmInfoMapper.updateStateIsNormal(com.getPortName(), point.getName());
 
                 }

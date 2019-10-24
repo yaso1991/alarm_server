@@ -51,7 +51,7 @@ public class AlarmStateServiceTest {
         }).start();
 
         try {
-            Thread.currentThread().join(60000);
+            Thread.currentThread().join(90000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

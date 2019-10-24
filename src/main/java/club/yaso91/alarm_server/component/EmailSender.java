@@ -27,7 +27,6 @@ public class EmailSender {
     JavaMailSender mailSender;
 
     public void sendPushMail(String from, String to, String subject, String context) {
-        System.out.println("wo haha ");
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(from);
         simpleMailMessage.setTo(to);

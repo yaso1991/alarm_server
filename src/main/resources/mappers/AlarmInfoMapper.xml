@@ -66,11 +66,12 @@
         where
             id = #{id}
     </update>
-    <update id="updateStateIsErring">
+    <update id="updateAlarming">
         update
             alarm_info
         set
-            alarm_span = alarm_span + 1
+            alarm_span = alarm_span + 1,
+            push_level = #{pushLevel}
         where
             com_port = #{comPort}
         and
@@ -84,7 +85,8 @@
         set
             alarming = 0,
             alarm_time = NULL,
-            alarm_span = 0
+            alarm_span = 0,
+            push_level = '未推送'
         where
             com_port = #{comPort}
             and
