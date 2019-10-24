@@ -52,7 +52,6 @@ public class AlarmStateService {
         modbusManger.startCommunication();
     }
 
-    //    @Scheduled(fixedDelay = 1000)
     public void updateAlarmInfo() {
         ArrayList<ModbusCom> coms = modbusManger.getComs();
         for (ModbusCom com : coms) {
@@ -133,6 +132,11 @@ public class AlarmStateService {
 
             }
         }
+    }
+
+    public void pushSumInfo() {
+        //TODO .....
+        System.out.println("fuck you");
     }
 
     private void setItemInfo(AlarmInfo alarmInfo, AlarmItemInfo alarmItemInfo) {
