@@ -29,12 +29,12 @@
     </update>
     <delete id="deleteEmployees">
         delete from
-            employee_info
+        employee_info
         where
-            id
+        id
         in
-        <foreach collection="list" open="(" separator="," close=")" item="item" index="index" >
-           #{item}
+        <foreach collection="list" open="(" separator="," close=")" item="item" index="index">
+            #{item}
         </foreach>
     </delete>
 
@@ -47,5 +47,13 @@
             email
         from
             employee_info;
+    </select>
+    <select id="selectEmails" resultType="java.lang.String">
+        select
+            email
+        from
+        employee_info
+        where
+            position = #{position}
     </select>
 </mapper>

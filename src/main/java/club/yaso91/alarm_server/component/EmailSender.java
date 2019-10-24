@@ -10,7 +10,6 @@ package club.yaso91.alarm_server.component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,12 +25,21 @@ public class EmailSender {
     @Autowired
     JavaMailSender mailSender;
 
-    public void sendPushMail(String from, String to, String subject, String context) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(from);
-        simpleMailMessage.setTo(to);
-        simpleMailMessage.setSubject(subject);
-        simpleMailMessage.setText(context);
-        mailSender.send(simpleMailMessage);
+    public void sendPushMail(String from, String to, String subject, String context, String... cc) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                simpleMailMessage.setFrom(from);
+                simpleMailMessage.setTo(to);
+                simpleMailMessage.setCc(cc);
+                simpleMailMessage.setSubject(subject);
+                simpleMailMessage.setText(context);
+                mailSender.send(simpleMailMessage);
+            }
+        },"emailThread_" + Thread.currentThread().getId()).start();
+
     }
+
+
 }

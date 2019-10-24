@@ -29,4 +29,6 @@ public interface EmployeeInfoMapper {
     int updateEmployee(Employee employee);
 
     int deleteEmployees(ArrayList<Integer> ids);
+
+    ArrayList<String> selectEmails(String position);
 }
