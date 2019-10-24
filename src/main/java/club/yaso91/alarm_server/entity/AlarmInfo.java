@@ -36,5 +36,5 @@ public class AlarmInfo {
     private Employee master;
     private CardReader cardReader;
     private String comPort;
-    private String modbusAddress;
+    private String pointName;
 }

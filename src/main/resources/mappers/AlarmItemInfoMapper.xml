@@ -23,6 +23,40 @@
             <result property="workId" column="m_work_id"/>
         </association>
     </resultMap>
+    <insert id="insert">
+        insert into
+            alarm_item_info (
+                alarm_id,
+                alarm_start_time,
+                alarm_span,
+                push_level,
+                employee_id,
+                master_id
+             )
+        values (
+            #{alarmInfo.id},
+            #{alarmStartTime},
+            #{alarmSpan},
+            #{pushLevel},
+            #{employee.id},
+            #{master.id}
+        );
+    </insert>
+    <update id="update">
+        update
+            alarm_item_info
+        set
+            alarm_span = #{alarmSpan},
+            push_level = #{pushLevel}
+        where
+            alarm_id = #{alarmInfo.id}
+        and
+            alarm_start_time = #{alarmStartTime}
+        limit
+            1
+        ;
+
+    </update>
 
     <select id="selectSumInfos" resultMap="advAlarmItemInfo">
         select
@@ -67,5 +101,17 @@
     </select>
     <select id="selectCount" resultType="java.lang.Integer">
         select count(*) from alarm_item_info
+    </select>
+    <select id="find" resultType="club.yaso91.alarm_server.entity.AlarmItemInfo">
+        select
+            *
+        from
+            alarm_item_info
+        where
+            alarm_id = #{alarmId}
+        and
+            alarm_start_time = #{alarmTime}
+        limit 1;
+
     </select>
 </mapper>

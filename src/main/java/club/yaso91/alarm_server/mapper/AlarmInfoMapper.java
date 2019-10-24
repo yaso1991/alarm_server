@@ -13,4 +13,14 @@ public interface AlarmInfoMapper {
     int updateAlarmInfo(AlarmInfo alarmInfo);
 
     int deleteAlarmInfos(ArrayList<Integer> ids);
+
+    int updateStateIsErring(AlarmInfo alarmInfo);
+
+    int updateStateIsNormal(String comPort, String pointName);
+
+    int findId(String comPort, String pointName);
+
+    AlarmInfo find(String comPort,String pointName);
+
+    int updateStateAlarmed(AlarmInfo alarmInfo);
 }

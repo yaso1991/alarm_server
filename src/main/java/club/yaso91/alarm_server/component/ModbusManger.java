@@ -27,11 +27,14 @@ public class ModbusManger {
     private ArrayList<ModbusCom> coms = new ArrayList<>();
 
     public ModbusManger() {
-        ModbusCom modbusCom = new ModbusCom("COM8");
-        modbusCom.addPoint(new ModbusPoint("1#报警点", 17, 2, 0, 1));
-        modbusCom.addPoint(new ModbusPoint("1#报警点数值", 17, 3, 0, 2));
-        coms.add(modbusCom);
-        coms.add(new ModbusCom("COM9"));
+        ModbusCom com41 = new ModbusCom("COM41");
+        com41.addPoint(new ModbusPoint("1#报警点", 17, 2, 0, 1));
+        com41.addPoint(new ModbusPoint("2#报警点", 17, 2, 1, 1));
+        coms.add(com41);
+        ModbusCom com42 = new ModbusCom("COM42");
+        com42.addPoint(new ModbusPoint("3#报警点", 17, 2, 0, 1));
+        com42.addPoint(new ModbusPoint("4#报警点", 17, 2, 1, 1));
+        coms.add(com42);
 
         for (ModbusCom com : coms) {
             com.initAndOpenCOMS();

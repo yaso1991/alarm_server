@@ -14,7 +14,7 @@
         <result property="state" column="state"/>
         <result property="type" column="type"/>
         <result property="comPort" column="com_port"/>
-        <result property="modbusAddress" column="modbus_address"/>
+        <result property="pointName" column="point_name"/>
         <association property="master" javaType="club.yaso91.alarm_server.entity.Employee">
             <id property="id" column="m_id"/>
             <result property="name" column="m_name"/>
@@ -42,14 +42,14 @@
             type,
             card_reader_id,
             com_port,
-            modbus_address
+            point_name
             )
         values (
             #{name},
             #{type},
             #{cardReaderId},
             #{comPort},
-            #{modbusAddress}
+            #{pointName}
         )
 
     </insert>
@@ -62,19 +62,56 @@
             card_reader_id = #{cardReaderId},
             state = #{state},
             com_port = #{comPort},
-            modbus_address = #{modbusAddress}
+            point_name = #{pointName}
         where
             id = #{id}
     </update>
+    <update id="updateStateIsErring">
+        update
+            alarm_info
+        set
+            alarm_span = alarm_span + 1
+        where
+            com_port = #{comPort}
+        and
+            point_name = #{pointName}
+        LIMIT 1;
+
+
+    </update>
+    <update id="updateStateIsNormal">
+        update alarm_info
+        set
+            alarming = 0,
+            alarm_time = NULL,
+            alarm_span = 0
+        where
+            com_port = #{comPort}
+            and
+            point_name = #{pointName}
+    </update>
+    <update id="updateStateAlarmed">
+        update
+            alarm_info
+        set
+            alarming = 1,
+            alarm_time = #{alarmTime}
+        where
+            com_port = #{comPort}
+        and
+            point_name = #{pointName}
+        LIMIT 1;
+    </update>
+
     <delete id="deleteAlarmInfos">
         delete from
-            alarm_info
+        alarm_info
         where
-            id
+        id
         in
-            <foreach index="index" item="item"  collection="list" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        <foreach index="index" item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </delete>
     <select id="selectAlarmInfos" resultMap="richAlarmInfo">
         select
@@ -107,5 +144,53 @@
         on
             a.card_reader_id = c.id
         ;
+    </select>
+    <select id="findId" resultType="java.lang.Integer">
+        select
+            id
+        from
+            alarm_info
+        where
+            com_port = #{comPort}
+        and
+            point_name = #{pointName}
+        limit 1;
+    </select>
+    <select id="find" resultMap="richAlarmInfo">
+        select
+        a.*,
+        e.id as e_id,
+        e.name as e_name,
+        e.work_id as e_work_id,
+        e.position as e_position,
+        e.email as e_email,
+        m.id as m_id,
+        m.name as m_name,
+        m.work_id as m_work_id,
+        m.position as m_position,
+        m.email as m_email,
+        c.id as c_id,
+        c.name as c_name,
+        c.value as c_value
+        from
+            alarm_info  a
+        left outer join
+            employee_info  e
+        on
+            a.employee_id = e.id
+        left outer join
+            employee_info  m
+        on
+            a.master_id  = m.id
+        left outer join
+            card_reader_info  c
+        on
+            a.card_reader_id = c.id
+        where
+            com_port = #{comPort}
+        and
+            point_name = #{pointName}
+        limit 1;
+
     </select>
 </mapper>

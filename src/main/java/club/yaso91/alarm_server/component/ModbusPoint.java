@@ -25,7 +25,7 @@ public class ModbusPoint {
     private int ref = 0;
     private int count = 0;
     private String value;
-
+    private String lastValue;
     /**
      * @title: ModbusPoint
      * @author: Yaso
@@ -45,5 +45,12 @@ public class ModbusPoint {
         this.code = code;
         this.ref = ref;
         this.count = count;
+    }
+
+    public void setValue(String value) {
+        if(this.value != value) {
+            this.setLastValue(this.value);
+            this.value = value;
+        }
     }
 }

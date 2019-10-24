@@ -26,4 +26,11 @@ public interface AlarmItemInfoMapper {
     ArrayList<AlarmItemInfo> selectSumInfos(Timestamp beginTime, Timestamp endTime, String alarmName, String employeeName);
 
     int selectCount();
+
+    AlarmItemInfo find(int alarmId, Timestamp alarmTime);
+
+
+    int insert(AlarmItemInfo alarmItemInfo);
+
+    int update(AlarmItemInfo alarmItemInfo);
 }
