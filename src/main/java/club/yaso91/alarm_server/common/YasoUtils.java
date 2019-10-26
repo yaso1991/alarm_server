@@ -9,6 +9,9 @@ package club.yaso91.alarm_server.common;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+
 /**
  * @version: V1.0
  * @author: Yaso
@@ -18,7 +21,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @data: 2019-10-16 20:37
  **/
 public class YasoUtils {
-    public static String genarateBCryptPasswordEncoder(String password,int encoderKey){
+    public static String genarateBCryptPasswordEncoder(String password, int encoderKey) {
         return new BCryptPasswordEncoder(4).encode(password);
+    }
+
+    /**
+     * 返回昨天的时间值,从昨天00:00:00.000开始
+     * @return 昨天的时间戳,00:00:00.000开始
+     */
+    public static long getYestodayMills() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis()-86400000);
+        int date = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+        return new Timestamp(year-1900,month,date,0,0,0,0).getTime();
     }
 }

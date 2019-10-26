@@ -29,20 +29,6 @@ public class ManagerService implements UserDetailsService {
     @Autowired
     ManagerInfoMapper managerInfoMapper;
 
-    /**
-     * @title: login
-     * @author: Yaso
-     * @date: 2019-10-05 11:36
-     * @description: TODO
-     * @param: username
-     * @param: password
-     * @return: club.yaso91.alarm_server.entity.Manager
-     * @throws:
-     */
-    public Manager login(String username, String password) {
-        return managerInfoMapper.selectManager(username, password);
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 

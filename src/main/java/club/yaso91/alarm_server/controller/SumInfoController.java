@@ -38,7 +38,6 @@ public class SumInfoController {
     @Autowired
     private SumInfoService sumInfoService;
 
-    @Secured("ROLE_ADMIN")
     @RequestMapping("/getSumInfos")
     public ArrayList<AlarmItemInfo> getSumInfos(Timestamp beginTime, Timestamp endTime, String alarmName, String employeeName) {
         return sumInfoService.getSumInfos(beginTime, endTime, alarmName, employeeName);

@@ -56,4 +56,9 @@ public class AlarmStateServiceTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void pushSumInfo() {
+        alarmStateService.pushSumInfo();
+    }
 }

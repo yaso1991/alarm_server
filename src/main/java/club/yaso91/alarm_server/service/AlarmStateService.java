@@ -7,6 +7,7 @@
  */
 package club.yaso91.alarm_server.service;
 
+import club.yaso91.alarm_server.common.YasoUtils;
 import club.yaso91.alarm_server.component.EmailSender;
 import club.yaso91.alarm_server.component.ModbusCom;
 import club.yaso91.alarm_server.component.ModbusManger;
@@ -134,9 +135,21 @@ public class AlarmStateService {
         }
     }
 
+    /**
+     * 汇总推送
+     */
     public void pushSumInfo() {
-        //TODO .....
-        System.out.println("fuck you");
+        //查询昨日报警记录
+        ArrayList<AlarmItemInfo> alarmItemInfos =
+                alarmItemInfoMapper.selectSumInfos(new Timestamp(YasoUtils.getYestodayMills()),
+                new Timestamp(YasoUtils.getYestodayMills() + 86399999), null, null);
+
+        //生成EXCEL报表
+
+        //EXCEL报表保存到本地
+
+        //发送本地报表到符合条件的emails.
+
     }
 
     private void setItemInfo(AlarmInfo alarmInfo, AlarmItemInfo alarmItemInfo) {

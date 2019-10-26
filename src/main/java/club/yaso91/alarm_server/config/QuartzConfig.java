@@ -11,7 +11,7 @@ import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
-@Configuration
+//@Configuration
 public class QuartzConfig {
     @Autowired
     private AlarmStateService alarmStateService;
