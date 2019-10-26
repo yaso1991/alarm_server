@@ -107,5 +107,10 @@ public class AlarmStateServiceTest {
 //            alarmItemInfoMapper.insert(alarmItemInfo);
 //        }
         alarmStateService.pushSumInfo();
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

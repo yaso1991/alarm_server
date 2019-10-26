@@ -176,7 +176,7 @@ public class AlarmStateService {
             headRowTemp.createCell(2).setCellValue(itemInfo.getAlarmInfo().getName());
             headRowTemp.createCell(3).setCellValue(itemInfo.getAlarmStartTime().toString());
             headRowTemp.createCell(4).setCellValue(itemInfo.getAlarmSpan());
-            headRowTemp.createCell(5).setCellValue(new Timestamp(itemInfo.getAlarmStartTime().getTime() + itemInfo.getAlarmSpan()*1000).toString());
+            headRowTemp.createCell(5).setCellValue(new Timestamp(itemInfo.getAlarmStartTime().getTime() + itemInfo.getAlarmSpan() * 1000).toString());
             headRowTemp.createCell(6).setCellValue(itemInfo.getEmployee().getWorkId());
             headRowTemp.createCell(7).setCellValue(itemInfo.getEmployee().getName());
             headRowTemp.createCell(8).setCellValue(itemInfo.getPushLevel());
@@ -186,17 +186,18 @@ public class AlarmStateService {
         }
         workbook.setActiveSheet(0);
 
-
+        //EXCEL报表保存到本地
         String dir = "sumInfos/";
+        String fileName =
+                "/报警汇总" + new SimpleDateFormat("yyyy_MM_dd").format(new Date(YasoUtils.getYestodayMills())) +
+                        ".xls";
+        File file = null;
         try {
             File fileDir = new File(dir);
             if (!fileDir.exists()) {
                 fileDir.mkdir();
             }
-            String fileName =
-                    "/报警汇总" + new SimpleDateFormat("yyyy_MM_dd").format(new Date(YasoUtils.getYestodayMills())) +
-                            ".xls";
-            File file =
+            file =
                     new File(fileDir, fileName);
             if (file.exists()) {
                 file.delete();
@@ -207,9 +208,27 @@ public class AlarmStateService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //EXCEL报表保存到本地
 
         //发送本地报表到符合条件的emails.
+        ArrayList<String> emails = employeeInfoMapper.selectEmails("经理");
+        if (emails == null || emails.size() < 1) {
+            return;
+        }
+        if (emails.size() == 1) {
+            emailSender.sendSumInfoMail(file, "1441825297@qq.com", emails.get(0), fileName.replace(".xls",
+                    ""),
+                    new Timestamp(YasoUtils.getYestodayMills()).toString() + "报警汇总,详见电子邮件的附件.");
+            return;
+        }
+        if (emails.size() > 1) {
+            String to = emails.get(0);
+            emails.remove(0);
+            emailSender.sendSumInfoMail(file, "1441825297@qq.com", to,
+                    new Timestamp(YasoUtils.getYestodayMills()).toString() + "报警汇总",
+                    new Timestamp(YasoUtils.getYestodayMills()).toString() + "报警汇总,详见电子邮件的附件.",
+                    emails.toArray(new String[emails.size()]));
+        }
+
 
     }
 
