@@ -205,6 +205,8 @@ public class AlarmStateService {
             }
             FileOutputStream outputStream = new FileOutputStream(file);
             workbook.write(outputStream);
+            outputStream.flush();
+            outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -228,7 +230,6 @@ public class AlarmStateService {
                     new Timestamp(YasoUtils.getYestodayMills()).toString() + "报警汇总,详见电子邮件的附件.",
                     emails.toArray(new String[emails.size()]));
         }
-
 
     }
 

@@ -1,6 +1,7 @@
 package club.yaso91.alarm_server.config;
 
 import club.yaso91.alarm_server.service.AlarmStateService;
+import lombok.Data;
 import org.quartz.CronTrigger;
 import org.quartz.SimpleTrigger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,12 @@ import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
-//@Configuration
+@Configuration
+@Data
 public class QuartzConfig {
     @Autowired
     private AlarmStateService alarmStateService;
+    private String cronExpression;
 
     @Bean
     MethodInvokingJobDetailFactoryBean jobDetail1() {
@@ -49,7 +52,8 @@ public class QuartzConfig {
         CronTriggerFactoryBean bean =
                 new CronTriggerFactoryBean();
         bean.setJobDetail(jobDetail2().getObject());
-        bean.setCronExpression("0 58 20 * * ?");
+        cronExpression = "0 21 20 * * ?";
+        bean.setCronExpression(cronExpression);
         return bean;
     }
 
