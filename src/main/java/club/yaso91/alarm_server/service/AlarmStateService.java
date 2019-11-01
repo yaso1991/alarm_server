@@ -57,7 +57,7 @@ public class AlarmStateService {
     @Autowired
     private EmployeeInfoMapper employeeInfoMapper;
     @Autowired
-    private SystemConfigService systemConfigService;
+    private LocalDataService localDataService;
 
     public AlarmStateService() {
         boot();
@@ -156,7 +156,7 @@ public class AlarmStateService {
     @Scheduled(cron = "0/50 * * * * ?")
     public void checkAndPushSumInfo() {
         Calendar calendar = Calendar.getInstance();
-        SystemConfig localSystemConfig = systemConfigService.getLocalSystemConfig();
+        SystemConfig localSystemConfig = localDataService.getLocalSystemConfig();
         Time sumPushTime = localSystemConfig.getSumPushTime();
         if (sumPushTime.getHours() == calendar.get(Calendar.HOUR_OF_DAY) && sumPushTime.getMinutes() == calendar.get(Calendar.MINUTE)) {
             pushSumInfo();

@@ -25,12 +25,13 @@ import org.springframework.stereotype.Service;
 @Data
 public class SystemConfigService {
     private SystemConfigMapper systemConfigMapper;
-    private SystemConfig localSystemConfig = null;
+    private LocalDataService localDataService;
 
     @Autowired
-    public SystemConfigService(SystemConfigMapper systemConfigMapper) {
+    public SystemConfigService(SystemConfigMapper systemConfigMapper,LocalDataService localDataService) {
         this.systemConfigMapper = systemConfigMapper;
-        localSystemConfig = this.systemConfigMapper.selectAll();
+        this.localDataService = localDataService;
+        this.localDataService.setLocalSystemConfig(this.systemConfigMapper.selectAll());
     }
 
     public SystemConfig loadSystemConfig() {
@@ -41,7 +42,7 @@ public class SystemConfigService {
         boolean result = false;
         result = systemConfigMapper.update(systemConfig) == 1;
         if (result) {
-            localSystemConfig = loadSystemConfig();
+            this.localDataService.setLocalSystemConfig(loadSystemConfig());
         }
         return result;
 
