@@ -36,7 +36,6 @@ public class ManagerService implements UserDetailsService {
         if(manager == null) {
             throw new UsernameNotFoundException("账户不存在.");
         }
-        System.out.println(manager);
         return  manager;
     }
 }

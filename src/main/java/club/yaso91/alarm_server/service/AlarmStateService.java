@@ -14,6 +14,7 @@ import club.yaso91.alarm_server.component.ModbusManger;
 import club.yaso91.alarm_server.component.ModbusPoint;
 import club.yaso91.alarm_server.entity.AlarmInfo;
 import club.yaso91.alarm_server.entity.AlarmItemInfo;
+import club.yaso91.alarm_server.entity.SystemConfig;
 import club.yaso91.alarm_server.mapper.AlarmInfoMapper;
 import club.yaso91.alarm_server.mapper.AlarmItemInfoMapper;
 import club.yaso91.alarm_server.mapper.EmployeeInfoMapper;
@@ -21,14 +22,17 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -52,6 +56,8 @@ public class AlarmStateService {
     private EmailSender emailSender;
     @Autowired
     private EmployeeInfoMapper employeeInfoMapper;
+    @Autowired
+    private SystemConfigService systemConfigService;
 
     public AlarmStateService() {
         boot();
@@ -61,6 +67,7 @@ public class AlarmStateService {
         modbusManger.startCommunication();
     }
 
+    @Scheduled(initialDelay = 10000, fixedDelay = 1000)
     public void updateAlarmInfo() {
         ArrayList<ModbusCom> coms = modbusManger.getComs();
         for (ModbusCom com : coms) {
@@ -146,7 +153,17 @@ public class AlarmStateService {
     /**
      * 汇总推送
      */
-    public void pushSumInfo() {
+    @Scheduled(cron = "0/50 * * * * ?")
+    public void checkAndPushSumInfo() {
+        Calendar calendar = Calendar.getInstance();
+        SystemConfig localSystemConfig = systemConfigService.getLocalSystemConfig();
+        Time sumPushTime = localSystemConfig.getSumPushTime();
+        if (sumPushTime.getHours() == calendar.get(Calendar.HOUR_OF_DAY) && sumPushTime.getMinutes() == calendar.get(Calendar.MINUTE)) {
+            pushSumInfo();
+        }
+    }
+
+    private void pushSumInfo() {
         //查询昨日报警记录
         ArrayList<AlarmItemInfo> alarmItemInfos =
                 alarmItemInfoMapper.selectSumInfos(new Timestamp(YasoUtils.getYestodayMills()),
@@ -230,7 +247,6 @@ public class AlarmStateService {
                     new Timestamp(YasoUtils.getYestodayMills()).toString() + "报警汇总,详见电子邮件的附件.",
                     emails.toArray(new String[emails.size()]));
         }
-
     }
 
     private void setItemInfo(AlarmInfo alarmInfo, AlarmItemInfo alarmItemInfo) {

@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @MapperScan("club.yaso91.alarm_server.mapper")
 @SpringBootApplication
+@EnableScheduling
 public class AlarmServerApplication {
 
     public static void main(String[] args) {

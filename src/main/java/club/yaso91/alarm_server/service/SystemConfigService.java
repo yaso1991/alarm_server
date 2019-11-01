@@ -9,6 +9,7 @@ package club.yaso91.alarm_server.service;
 
 import club.yaso91.alarm_server.entity.SystemConfig;
 import club.yaso91.alarm_server.mapper.SystemConfigMapper;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +22,28 @@ import org.springframework.stereotype.Service;
  * @data: 2019-10-11 13:59
  **/
 @Service
+@Data
 public class SystemConfigService {
-    @Autowired
     private SystemConfigMapper systemConfigMapper;
+    private SystemConfig localSystemConfig = null;
+
+    @Autowired
+    public SystemConfigService(SystemConfigMapper systemConfigMapper) {
+        this.systemConfigMapper = systemConfigMapper;
+        localSystemConfig = this.systemConfigMapper.selectAll();
+    }
 
     public SystemConfig loadSystemConfig() {
         return systemConfigMapper.selectAll();
     }
 
     public boolean updateSystemConfig(SystemConfig systemConfig) {
-        return systemConfigMapper.update(systemConfig) == 1;
+        boolean result = false;
+        result = systemConfigMapper.update(systemConfig) == 1;
+        if (result) {
+            localSystemConfig = loadSystemConfig();
+        }
+        return result;
+
     }
 }

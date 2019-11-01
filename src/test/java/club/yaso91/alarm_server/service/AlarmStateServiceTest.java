@@ -1,9 +1,5 @@
 package club.yaso91.alarm_server.service;
 
-import club.yaso91.alarm_server.common.YasoUtils;
-import club.yaso91.alarm_server.entity.AlarmInfo;
-import club.yaso91.alarm_server.entity.AlarmItemInfo;
-import club.yaso91.alarm_server.entity.Employee;
 import club.yaso91.alarm_server.mapper.AlarmItemInfoMapper;
 import org.junit.After;
 import org.junit.Before;
@@ -12,9 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.sql.Timestamp;
-import java.util.Random;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -106,7 +99,7 @@ public class AlarmStateServiceTest {
 //
 //            alarmItemInfoMapper.insert(alarmItemInfo);
 //        }
-        alarmStateService.pushSumInfo();
+        alarmStateService.checkAndPushSumInfo();
         try {
             Thread.currentThread().join();
         } catch (InterruptedException e) {
