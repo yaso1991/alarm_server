@@ -42,7 +42,7 @@ public class QuartzConfig {
         SimpleTriggerFactoryBean bean =
                 new SimpleTriggerFactoryBean();
         bean.setJobDetail(jobDetail1().getObject());
-        bean.setStartDelay(1000);
+        bean.setStartDelay(10000);
         bean.setRepeatInterval(1000);
         return bean;
     }
