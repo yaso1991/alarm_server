@@ -71,6 +71,9 @@ public class AlarmStateService {
     public void updateAlarmInfo() {
         ArrayList<ModbusCom> coms = modbusManger.getComs();
         for (ModbusCom com : coms) {
+            if(!com.isConnected()) {
+                continue;
+            }
             HashMap<String, ModbusPoint> points = com.getPoints();
             for (String key : points.keySet()) {
                 ModbusPoint point = points.get(key);

@@ -29,7 +29,7 @@ import java.util.HashMap;
  * @data: 2019-10-19 15:53
  **/
 @Data
-public class ModbusCom  {
+public class ModbusCom {
     private String serialEncodingRtu = Modbus.SERIAL_ENCODING_RTU;
     private int stopBits = 1;
     private String parity = "None";
@@ -39,29 +39,35 @@ public class ModbusCom  {
     private String portName;
     private HashMap<String, ModbusPoint> points = new HashMap<>();
     private int millis = 500;
+    private boolean connected = false;
+    private final SerialParameters params = new SerialParameters();
 
 
     public ModbusCom(String portName) {
         this.portName = portName;
-    }
 
-
-    public void initAndOpenCOMS() {
-
-        SerialParameters params = new SerialParameters();
-        params.setPortName(portName);
+        params.setPortName(this.portName);
         params.setBaudRate(rate);
         params.setDatabits(dataBits);
         params.setParity(parity);
         params.setStopbits(stopBits);
         params.setEncoding(serialEncodingRtu);
         params.setEcho(false);
+    }
+
+
+    public void initAndOpenCOM() {
+        if (connected) {
+            return;
+        }
         com = new SerialConnection(params);
         try {
             com.open();
-            System.out.println(this.portName + " open.");
+            System.out.println(this.portName + " open success.");
+            connected = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(this.portName + " open failed.");
+            connected = false;
         }
     }
 
@@ -70,6 +76,11 @@ public class ModbusCom  {
     }
 
     public void comminucateWithModbus() {
+        if(!connected) {
+            System.out.println(this.portName  + " reconnecting...");
+            initAndOpenCOM();
+            return;
+        }
         try {
             for (String key : points.keySet()) {
                 ModbusPoint point = points.get(key);
@@ -109,7 +120,6 @@ public class ModbusCom  {
                 } else {
 
                 }
-
             }
         } catch (ModbusException e) {
             e.printStackTrace();

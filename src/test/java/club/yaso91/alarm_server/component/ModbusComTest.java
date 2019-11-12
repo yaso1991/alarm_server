@@ -16,7 +16,7 @@ public class ModbusComTest {
         modbusCom.addPoint(new ModbusPoint("1#报警点", 17, 2, 0, 1));
         modbusCom.addPoint(new ModbusPoint("1#报警点数值", 17, 3, 0, 2));
 
-        modbusCom.initAndOpenCOMS();
+        modbusCom.initAndOpenCOM();
     }
 
     @After
