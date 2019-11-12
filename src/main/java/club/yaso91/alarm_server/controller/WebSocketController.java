@@ -7,15 +7,14 @@
  */
 package club.yaso91.alarm_server.controller;
 
-import club.yaso91.alarm_server.entity.Message;
+import club.yaso91.alarm_server.entity.AlarmInfo;
+import club.yaso91.alarm_server.service.AlarmInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
+import java.util.ArrayList;
 
 /**
  * @version: V1.0
@@ -29,11 +28,12 @@ import java.security.Principal;
 public class WebSocketController {
     @Autowired
     SimpMessagingTemplate simpMessagingTemplate;
+    @Autowired
+    AlarmInfoService alarmInfoService;
+
     @Scheduled(initialDelay = 10000, fixedDelay = 1000)
-    public void greeting() throws Exception{
-        Message message = new Message();
-        message.setContent("son of a bitch");
-        message.setName("hhe");
-        simpMessagingTemplate.convertAndSend("/topic/greetings",message);
+    public void greeting() throws Exception {
+        ArrayList<AlarmInfo> alarmInfos = alarmInfoService.getAlarmInfos();
+        simpMessagingTemplate.convertAndSend("/topic/greetings", alarmInfos);
     }
 }
