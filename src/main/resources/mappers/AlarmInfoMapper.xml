@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="club.yaso91.alarm_server.mapper.AlarmInfoMapper">
-    <resultMap id="richAlarmInfo" type="club.yaso91.alarm_server.entity.AlarmInfo">
+<mapper namespace="club.yaso91.alarmserver.mapper.AlarmInfoMapper">
+    <resultMap id="richAlarmInfo" type="club.yaso91.alarmserver.entity.AlarmInfo">
         <id property="id" column="id"/>
         <result property="alarming" column="alarming"/>
         <result property="alarmSpan" column="alarm_span"/>
@@ -15,21 +15,21 @@
         <result property="type" column="type"/>
         <result property="comPort" column="com_port"/>
         <result property="pointName" column="point_name"/>
-        <association property="master" javaType="club.yaso91.alarm_server.entity.Employee">
+        <association property="master" javaType="club.yaso91.alarmserver.entity.Employee">
             <id property="id" column="m_id"/>
             <result property="name" column="m_name"/>
             <result property="workId" column="m_work_id"/>
             <result property="position" column="m_position"/>
             <result property="email" column="m_email"/>
         </association>
-        <association property="employee" javaType="club.yaso91.alarm_server.entity.Employee">
+        <association property="employee" javaType="club.yaso91.alarmserver.entity.Employee">
             <id property="id" column="e_id"/>
             <result property="name" column="e_name"/>
             <result property="workId" column="e_work_id"/>
             <result property="position" column="e_position"/>
             <result property="email" column="e_email"/>
         </association>
-        <association property="cardReader" javaType="club.yaso91.alarm_server.entity.CardReader">
+        <association property="cardReader" javaType="club.yaso91.alarmserver.entity.CardReader">
             <id property="id" column="c_id"/>
             <result property="name" column="c_name"/>
             <result property="value" column="c_value"/>

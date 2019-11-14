@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="club.yaso91.alarm_server.mapper.AlarmItemInfoMapper">
+<mapper namespace="club.yaso91.alarmserver.mapper.AlarmItemInfoMapper">
 
-    <resultMap id="advAlarmItemInfo" type="club.yaso91.alarm_server.entity.AlarmItemInfo">
+    <resultMap id="advAlarmItemInfo" type="club.yaso91.alarmserver.entity.AlarmItemInfo">
         <id property="id" column="id"/>
         <result property="pushLevel" column="push_level"/>
         <result property="alarmStartTime" column="alarm_start_time"/>
         <result property="alarmSpan" column="alarm_span"/>
-        <association property="alarmInfo" javaType="club.yaso91.alarm_server.entity.AlarmInfo">
+        <association property="alarmInfo" javaType="club.yaso91.alarmserver.entity.AlarmInfo">
             <id property="id" column="a_id"/>
             <result property="name" column="a_name"/>
         </association>
-        <association property="employee" javaType="club.yaso91.alarm_server.entity.Employee">
+        <association property="employee" javaType="club.yaso91.alarmserver.entity.Employee">
             <id property="id" column="e_id"/>
             <result property="name" column="e_name"/>
             <result property="workId" column="e_work_id"/>
 
         </association>
-        <association property="master" javaType="club.yaso91.alarm_server.entity.Employee">
+        <association property="master" javaType="club.yaso91.alarmserver.entity.Employee">
             <id property="id" column="m_id"/>
             <result property="name" column="m_name"/>
             <result property="workId" column="m_work_id"/>
@@ -102,7 +102,7 @@
     <select id="selectCount" resultType="java.lang.Integer">
         select count(*) from alarm_item_info
     </select>
-    <select id="find" resultType="club.yaso91.alarm_server.entity.AlarmItemInfo">
+    <select id="find" resultType="club.yaso91.alarmserver.entity.AlarmItemInfo">
         select
             *
         from
