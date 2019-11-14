@@ -7,7 +7,6 @@
  */
 package club.yaso91.alarm_server.config;
 
-import club.yaso91.alarm_server.common.YasoUtils;
 import club.yaso91.alarm_server.security.LoginFailureHandler;
 import club.yaso91.alarm_server.security.LoginSuccessHandler;
 import club.yaso91.alarm_server.security.NotLoginDeniedHandler;
@@ -57,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();//禁止csrf验证.
+        http.csrf().disable();// 禁止csrf验证.
         http.authorizeRequests()
                 .anyRequest()
                 .authenticated()

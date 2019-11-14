@@ -10,8 +10,11 @@ package club.yaso91.alarm_server.component;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @version: V1.0
@@ -25,22 +28,25 @@ import java.util.concurrent.Executors;
 @Data
 public class ModbusManger {
     private ArrayList<ModbusCom> coms = new ArrayList<>();
+    private ThreadPoolExecutor threadPoolExecutor;
 
     public ModbusManger() {
+        // 添加串口
         ModbusCom com11 = new ModbusCom("COM11");
         com11.addPoint(new ModbusPoint("1#报警点", 17, 2, 34, 1));
         com11.addPoint(new ModbusPoint("2#报警点", 17, 2, 31, 1));
         coms.add(com11);
 
-        for (ModbusCom com : coms) {
-            com.initAndOpenCOM();
-        }
+        // 根据串口数量初始化线程池
+        int size = coms.size();
+        threadPoolExecutor = new ThreadPoolExecutor(size, size, 60L, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(size), new YasoThreadFactory("modbus"));
+
     }
 
     public void startCommunication() {
-        ExecutorService executorService = Executors.newCachedThreadPool();
         for (ModbusCom com : coms) {
-            executorService.execute(new Runnable() {
+            threadPoolExecutor.submit(new Runnable() {
                 @Override
                 public void run() {
                     while (true) {
@@ -55,5 +61,26 @@ public class ModbusManger {
             });
         }
     }
+}
 
+class YasoThreadFactory implements ThreadFactory {
+    private final String namePrefix;
+    private final AtomicInteger nextId = new AtomicInteger(1);
+
+    /**
+     * 定义线程组名称，在问题排查时，非常有帮助
+     *
+     * @param whatFeaturOfGroup 线程组名
+     */
+    YasoThreadFactory(String whatFeaturOfGroup) {
+        namePrefix = "From UserThreadFactory's " + whatFeaturOfGroup + "-Worker-";
+    }
+
+    @Override
+    public Thread newThread(Runnable task) {
+        String name = namePrefix + nextId.getAndIncrement();
+        Thread thread = new Thread(null, task, name, 0, false);
+        System.out.println(thread.getName());
+        return thread;
+    }
 }

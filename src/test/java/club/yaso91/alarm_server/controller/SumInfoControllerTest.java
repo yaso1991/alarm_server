@@ -17,10 +17,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)

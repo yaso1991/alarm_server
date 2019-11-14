@@ -30,11 +30,11 @@ import java.util.HashMap;
  **/
 @Data
 public class ModbusCom {
-    private String serialEncodingRtu = Modbus.SERIAL_ENCODING_RTU;
-    private int stopBits = 1;
-    private String parity = "None";
-    private int dataBits = 8;
-    private int rate = 9600;
+    private static final String SERIAL_ENCODING_RTU = Modbus.SERIAL_ENCODING_RTU;
+    private static final int STOP_BITS = 1;
+    private static final String PARITY = "None";
+    private static final int DATABITS = 8;
+    private static final int RATE = 9600;
     private AbstractSerialConnection com;
     private String portName;
     private HashMap<String, ModbusPoint> points = new HashMap<>();
@@ -47,16 +47,16 @@ public class ModbusCom {
         this.portName = portName;
 
         params.setPortName(this.portName);
-        params.setBaudRate(rate);
-        params.setDatabits(dataBits);
-        params.setParity(parity);
-        params.setStopbits(stopBits);
-        params.setEncoding(serialEncodingRtu);
+        params.setBaudRate(RATE);
+        params.setDatabits(DATABITS);
+        params.setParity(PARITY);
+        params.setStopbits(STOP_BITS);
+        params.setEncoding(SERIAL_ENCODING_RTU);
         params.setEcho(false);
     }
 
 
-    public void initAndOpenCOM() {
+    public void initAndOpenCom() {
         if (connected) {
             return;
         }
@@ -78,10 +78,11 @@ public class ModbusCom {
     public void comminucateWithModbus() {
         if(!connected) {
             System.out.println(this.portName  + " reconnecting...");
-            initAndOpenCOM();
+            initAndOpenCom();
             return;
         }
         try {
+            //TODO 这里需要将keyset 改为entryset 提高性能.
             for (String key : points.keySet()) {
                 ModbusPoint point = points.get(key);
                 ModbusRequest req = null;

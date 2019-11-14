@@ -7,7 +7,6 @@
  */
 package club.yaso91.alarm_server.service;
 
-import club.yaso91.alarm_server.common.YasoUtils;
 import club.yaso91.alarm_server.component.EmailSender;
 import club.yaso91.alarm_server.component.ModbusCom;
 import club.yaso91.alarm_server.component.ModbusManger;
@@ -18,6 +17,7 @@ import club.yaso91.alarm_server.entity.SystemConfig;
 import club.yaso91.alarm_server.mapper.AlarmInfoMapper;
 import club.yaso91.alarm_server.mapper.AlarmItemInfoMapper;
 import club.yaso91.alarm_server.mapper.EmployeeInfoMapper;
+import club.yaso91.client.util.YasoUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -60,10 +60,11 @@ public class AlarmStateService {
     private LocalDataService localDataService;
 
     public AlarmStateService() {
-        boot();
+        init();
     }
 
-    private void boot() {
+    private void init() {
+        // 开始读取串口数据.
         modbusManger.startCommunication();
     }
 
@@ -71,7 +72,7 @@ public class AlarmStateService {
     public void updateAlarmInfo() {
         ArrayList<ModbusCom> coms = modbusManger.getComs();
         for (ModbusCom com : coms) {
-            if(!com.isConnected()) {
+            if (!com.isConnected()) {
                 continue;
             }
             HashMap<String, ModbusPoint> points = com.getPoints();
@@ -79,16 +80,16 @@ public class AlarmStateService {
                 ModbusPoint point = points.get(key);
                 String current = point.getValue();
 
-                //检测为正常
-                if (current.equals("false")) {
+                //  检测为正常
+                if ("false".equals(current)) {
                     alarmInfoMapper.updateStateIsNormal(com.getPortName(), point.getName());
                     continue;
                 }
-                //检测到故障
-                if (current.equals("true")) {
+                // 检测到故障
+                if ("true".equals(current)) {
                     AlarmInfo alarmInfo = alarmInfoMapper.find(com.getPortName(), point.getName());
                     AlarmItemInfo alarmItemInfo = new AlarmItemInfo();
-                    //刚发生报警
+                    // 刚发生报警
                     if (alarmInfo.getAlarmTime() == null) {
                         alarmInfo.setAlarmTime(new Timestamp(System.currentTimeMillis()));
                         alarmInfo.setAlarming(true);
@@ -98,23 +99,21 @@ public class AlarmStateService {
                         continue;
                     }
 
-
-                    //持续发生报警
-                    //报警推送
+                    // 持续发生报警
                     boolean needPushing = false;
-                    if (alarmInfo.getAlarmSpan() >= 20 && alarmInfo.getPushLevel().equals("未推送")) {
+                    if (alarmInfo.getAlarmSpan() >= 20 && "未推送".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("班组长级");
                         needPushing = true;
-                    } else if (alarmInfo.getAlarmSpan() >= 40 && alarmInfo.getPushLevel().equals("班组长级")) {
+                    } else if (alarmInfo.getAlarmSpan() >= 40 && "班组长级".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("主任级");
                         needPushing = true;
 
-                    } else if (alarmInfo.getAlarmSpan() >= 60 && alarmInfo.getPushLevel().equals("主任级")) {
+                    } else if (alarmInfo.getAlarmSpan() >= 60 && "主任级".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("经理级");
                         needPushing = true;
                     }
 
-                    //需要推送
+                    // 需要推送
                     if (needPushing) {
                         ArrayList<String> emails = employeeInfoMapper.selectEmails(alarmInfo.getPushLevel().replace("级",
                                 ""));
@@ -167,12 +166,12 @@ public class AlarmStateService {
     }
 
     private void pushSumInfo() {
-        //查询昨日报警记录
+        // 查询昨日报警记录
         ArrayList<AlarmItemInfo> alarmItemInfos =
                 alarmItemInfoMapper.selectSumInfos(new Timestamp(YasoUtils.getYestodayMills()),
                         new Timestamp(YasoUtils.getYestodayMills() + 86399999), null, null);
 
-        //生成EXCEL报表
+        // 生成EXCEL报表
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet();
         HSSFRow headRow = sheet.createRow(0);
@@ -206,7 +205,7 @@ public class AlarmStateService {
         }
         workbook.setActiveSheet(0);
 
-        //EXCEL报表保存到本地
+        // EXCEL报表保存到本地
         String dir = "sumInfos/";
         String fileName =
                 "/报警汇总" + new SimpleDateFormat("yyyy_MM_dd").format(new Date(YasoUtils.getYestodayMills())) +
@@ -231,7 +230,7 @@ public class AlarmStateService {
             e.printStackTrace();
         }
 
-        //发送本地报表到符合条件的emails.
+        // 发送本地报表到符合条件的emails.
         ArrayList<String> emails = employeeInfoMapper.selectEmails("经理");
         if (emails == null || emails.size() < 1) {
             return;

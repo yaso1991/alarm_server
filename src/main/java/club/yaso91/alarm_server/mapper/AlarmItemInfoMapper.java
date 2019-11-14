@@ -23,7 +23,8 @@ import java.util.ArrayList;
  **/
 @Repository
 public interface AlarmItemInfoMapper {
-    ArrayList<AlarmItemInfo> selectSumInfos(Timestamp beginTime, Timestamp endTime, String alarmName, String employeeName);
+    ArrayList<AlarmItemInfo> selectSumInfos(Timestamp beginTime, Timestamp endTime, String alarmName,
+                                            String employeeName);
 
     int selectCount();
 

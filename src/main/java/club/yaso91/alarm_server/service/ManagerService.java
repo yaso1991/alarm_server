@@ -8,7 +8,6 @@
 package club.yaso91.alarm_server.service;
 
 import club.yaso91.alarm_server.entity.Manager;
-import club.yaso91.alarm_server.entity.SystemConfig;
 import club.yaso91.alarm_server.mapper.ManagerInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,16 +25,17 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class ManagerService implements UserDetailsService {
+
     @Autowired
-    ManagerInfoMapper managerInfoMapper;
+     private ManagerInfoMapper managerInfoMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Manager manager =  managerInfoMapper.selectUserByUsername(username);
-        if(manager == null) {
+        Manager manager = managerInfoMapper.selectUserByUsername(username);
+        if (manager == null) {
             throw new UsernameNotFoundException("账户不存在.");
         }
-        return  manager;
+        return manager;
     }
 }
