@@ -11,7 +11,7 @@ import club.yaso91.alarmserver.security.LoginFailureHandler;
 import club.yaso91.alarmserver.security.LoginSuccessHandler;
 import club.yaso91.alarmserver.security.NotLoginDeniedHandler;
 import club.yaso91.alarmserver.security.SuccessLogoutHandler;
-import club.yaso91.alarmserver.service.ManagerService;
+import club.yaso91.alarmserver.service.ManagerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +37,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private ManagerService managerService;
+    private ManagerServiceImpl managerServiceImpl;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(managerService);
+        auth.userDetailsService(managerServiceImpl);
     }
 
     @Override

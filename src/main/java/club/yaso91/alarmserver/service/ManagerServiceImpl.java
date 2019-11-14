@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
  * @data: 2019-10-05 11:35
  **/
 @Service
-public class ManagerService implements UserDetailsService {
+public class ManagerServiceImpl implements UserDetailsService {
 
     @Autowired
      private ManagerInfoMapper managerInfoMapper;

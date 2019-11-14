@@ -101,6 +101,7 @@ public class AlarmStateService {
 
                     // 持续发生报警
                     boolean needPushing = false;
+                    // FIXME 这里需要时间,从数据库里导入
                     if (alarmInfo.getAlarmSpan() >= 20 && "未推送".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("班组长级");
                         needPushing = true;
