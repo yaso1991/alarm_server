@@ -22,13 +22,42 @@ import java.util.ArrayList;
  **/
 @Repository
 public interface EmployeeInfoMapper {
+    /**
+     * 选取
+     *
+     * @return
+     */
     ArrayList<Employee> selectAll();
 
+    /**
+     * 插入
+     *
+     * @param employee
+     * @return
+     */
     int insertEmployee(Employee employee);
 
+    /**
+     * 更新
+     *
+     * @param employee
+     * @return
+     */
     int updateEmployee(Employee employee);
 
+    /**
+     * 删除
+     *
+     * @param ids
+     * @return
+     */
     int deleteEmployees(ArrayList<Integer> ids);
 
+    /**
+     * 根据职位选取emails
+     *
+     * @param position 职务
+     * @return 选取的email List
+     */
     ArrayList<String> selectEmails(String position);
 }

@@ -54,6 +54,7 @@
             <scope>runtime</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <!--定时任务和@Slf4j注解日志的依赖-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

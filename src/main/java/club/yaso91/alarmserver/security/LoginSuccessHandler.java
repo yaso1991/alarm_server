@@ -34,7 +34,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication auth) throws IOException, ServletException {
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(200);
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<String, Object>(16);
         map.put("manager", auth.getPrincipal());
         map.put("authenticated", true);
         PrintWriter out = response.getWriter();

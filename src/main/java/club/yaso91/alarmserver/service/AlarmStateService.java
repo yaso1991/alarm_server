@@ -7,6 +7,7 @@
  */
 package club.yaso91.alarmserver.service;
 
+import club.yaso91.alarmserver.common.AlarmItemInfoExcelHandler;
 import club.yaso91.alarmserver.component.EmailSender;
 import club.yaso91.alarmserver.component.ModbusCom;
 import club.yaso91.alarmserver.component.ModbusManger;
@@ -18,14 +19,13 @@ import club.yaso91.alarmserver.mapper.AlarmInfoMapper;
 import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
 import club.yaso91.alarmserver.mapper.EmployeeInfoMapper;
 import club.yaso91.client.util.YasoUtils;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -153,7 +153,7 @@ public class AlarmStateService {
     }
 
     /**
-     * 汇总推送
+     * 定时汇总推送
      */
     @Scheduled(cron = "0/50 * * * * ?")
     public void checkAndPushSumInfo() {
@@ -166,6 +166,7 @@ public class AlarmStateService {
         }
     }
 
+
     private void pushSumInfo() {
         // 查询昨日报警记录
         ArrayList<AlarmItemInfo> alarmItemInfos =
@@ -174,37 +175,7 @@ public class AlarmStateService {
 
         // 生成EXCEL报表
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet();
-        HSSFRow headRow = sheet.createRow(0);
-        headRow.createCell(0).setCellValue("序号");
-        headRow.createCell(1).setCellValue("ID");
-        headRow.createCell(2).setCellValue("报警点");
-        headRow.createCell(3).setCellValue("报警时间");
-        headRow.createCell(4).setCellValue("报警时长");
-        headRow.createCell(5).setCellValue("结束时间");
-        headRow.createCell(6).setCellValue("员工编号");
-        headRow.createCell(7).setCellValue("员工姓名");
-        headRow.createCell(8).setCellValue("推送");
-        headRow.createCell(9).setCellValue("组长编号");
-        headRow.createCell(10).setCellValue("组长姓名");
-
-        int index = 1;
-        for (AlarmItemInfo itemInfo : alarmItemInfos) {
-            HSSFRow headRowTemp = sheet.createRow(index);
-            headRowTemp.createCell(0).setCellValue(index);
-            headRowTemp.createCell(1).setCellValue(itemInfo.getId());
-            headRowTemp.createCell(2).setCellValue(itemInfo.getAlarmInfo().getName());
-            headRowTemp.createCell(3).setCellValue(itemInfo.getAlarmStartTime().toString());
-            headRowTemp.createCell(4).setCellValue(itemInfo.getAlarmSpan());
-            headRowTemp.createCell(5).setCellValue(new Timestamp(itemInfo.getAlarmStartTime().getTime() + itemInfo.getAlarmSpan() * 1000).toString());
-            headRowTemp.createCell(6).setCellValue(itemInfo.getEmployee().getWorkId());
-            headRowTemp.createCell(7).setCellValue(itemInfo.getEmployee().getName());
-            headRowTemp.createCell(8).setCellValue(itemInfo.getPushLevel());
-            headRowTemp.createCell(9).setCellValue(itemInfo.getMaster().getWorkId());
-            headRowTemp.createCell(10).setCellValue(itemInfo.getMaster().getName());
-            index++;
-        }
-        workbook.setActiveSheet(0);
+        AlarmItemInfoExcelHandler.generatorExcelBook(alarmItemInfos, workbook);
 
         // EXCEL报表保存到本地
         String dir = "sumInfos/";
@@ -212,24 +183,40 @@ public class AlarmStateService {
                 "/报警汇总" + new SimpleDateFormat("yyyy_MM_dd").format(new Date(YasoUtils.getYestodayMills())) +
                         ".xls";
         File file = null;
-        try {
-            File fileDir = new File(dir);
-            if (!fileDir.exists()) {
-                fileDir.mkdir();
-            }
-            file =
-                    new File(fileDir, fileName);
-            if (file.exists()) {
-                file.delete();
+        File fileDir = new File(dir);
+        if (!fileDir.exists()) {
+            fileDir.mkdir();
+        }
+        file = new File(fileDir, fileName);
+        if (file.exists()) {
+            file.delete();
+            try {
                 file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            FileOutputStream outputStream = new FileOutputStream(file);
+        }
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(file);
             workbook.write(outputStream);
-            outputStream.flush();
-            outputStream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            //关闭流.
+            if (null != outputStream) {
+                try {
+                    outputStream.flush();
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
 
         // 发送本地报表到符合条件的emails.
         ArrayList<String> emails = employeeInfoMapper.selectEmails("经理");
@@ -251,6 +238,7 @@ public class AlarmStateService {
                     emails.toArray(new String[emails.size()]));
         }
     }
+
 
     private void setItemInfo(AlarmInfo alarmInfo, AlarmItemInfo alarmItemInfo) {
         alarmItemInfo.setAlarmInfo(alarmInfo);

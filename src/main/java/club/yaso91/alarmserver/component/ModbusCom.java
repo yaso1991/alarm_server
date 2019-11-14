@@ -16,6 +16,7 @@ import com.ghgande.j2mod.modbus.net.SerialConnection;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,12 +30,16 @@ import java.util.HashMap;
  * @data: 2019-10-19 15:53
  **/
 @Data
+@Slf4j
 public class ModbusCom {
     private static final String SERIAL_ENCODING_RTU = Modbus.SERIAL_ENCODING_RTU;
     private static final int STOP_BITS = 1;
     private static final String PARITY = "None";
     private static final int DATABITS = 8;
     private static final int RATE = 9600;
+    private static final int BYTE_COUNT_OF_A_DOUBLE_WORD = 4;
+
+
     private AbstractSerialConnection com;
     private String portName;
     private HashMap<String, ModbusPoint> points = new HashMap<>();
@@ -113,8 +118,8 @@ public class ModbusCom {
                     ReadMultipleRegistersResponse res = (ReadMultipleRegistersResponse) trans.getResponse();
 
                     byte[] message = res.getMessage();
-                    byte[] data = new byte[4];
-                    for (int i = 0; i < 4; i++) {
+                    byte[] data = new byte[BYTE_COUNT_OF_A_DOUBLE_WORD];
+                    for (int i = 0; i < BYTE_COUNT_OF_A_DOUBLE_WORD; i++) {
                         data[i] = message[i + 1];
                     }
                     point.setValue(String.valueOf(ModbusUtil.registersToFloat(data)));
@@ -123,7 +128,8 @@ public class ModbusCom {
                 }
             }
         } catch (ModbusException e) {
-            e.printStackTrace();
+            // TODO 使用日志.
+            log.warn(e.toString());
         }
     }
 }

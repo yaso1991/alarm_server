@@ -56,7 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();// 禁止csrf验证.
+        // 禁止csrf验证.
+        http.csrf().disable();
         http.authorizeRequests()
                 .anyRequest()
                 .authenticated()
@@ -76,9 +77,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .exceptionHandling()
-//                .accessDeniedHandler(new LoginedDeniedHandler()) // 当登录后访问无权资源时（默认跳转到报错页面）
-                .authenticationEntryPoint(new NotLoginDeniedHandler()) // 当未登录用户访问未授权资源是的处理动作.
+                // 当登录后访问无权资源时（默认跳转到报错页面）
+//                .accessDeniedHandler(new LoginedDeniedHandler())
+                // 当未登录用户访问未授权资源是的处理动作.
+                .authenticationEntryPoint(new NotLoginDeniedHandler())
         ;
-
     }
 }

@@ -34,7 +34,7 @@ public class SuccessLogoutHandler implements LogoutSuccessHandler {
                                 Authentication auth) throws IOException, ServletException {
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(200);
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<String, Object>(16);
         map.put("authenticated", false);
         PrintWriter out = response.getWriter();
         out.write(JSON.toJSONString(map));

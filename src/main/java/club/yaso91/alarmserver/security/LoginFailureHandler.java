@@ -34,7 +34,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(401);
         ObjectMapper om = new ObjectMapper();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<String, Object>(16);
         map.put("status", 401);
         if (e instanceof BadCredentialsException ||
                 e instanceof UsernameNotFoundException) {
