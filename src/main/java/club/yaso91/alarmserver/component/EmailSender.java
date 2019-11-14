@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @version: V1.0
@@ -28,10 +31,12 @@ import java.io.File;
 @Component
 public class EmailSender {
     @Autowired
-    JavaMailSender mailSender;
+    private JavaMailSender mailSender;
+    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 60L, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<>(10), new YasoThreadFactory("emailSender"));
 
     public void sendPushMail(String from, String to, String subject, String context, String... cc) {
-        new Thread(new Runnable() {
+        threadPoolExecutor.submit(new Runnable() {
             @Override
             public void run() {
                 SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
@@ -42,12 +47,12 @@ public class EmailSender {
                 simpleMailMessage.setText(context);
                 mailSender.send(simpleMailMessage);
             }
-        }, "emailThread_" + Thread.currentThread().getId()).start();
+        });
     }
 
     public void sendSumInfoMail(File file, String from, String to, String subject, String context,
                                 String... cc) {
-        new Thread(new Runnable() {
+        threadPoolExecutor.submit(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -64,6 +69,6 @@ public class EmailSender {
                     e.printStackTrace();
                 }
             }
-        }, "emailThread_" + Thread.currentThread().getId()).start();
+        });
     }
 }
