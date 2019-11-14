@@ -11,10 +11,8 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @version: V1.0
@@ -63,24 +61,3 @@ public class ModbusManger {
     }
 }
 
-class YasoThreadFactory implements ThreadFactory {
-    private final String namePrefix;
-    private final AtomicInteger nextId = new AtomicInteger(1);
-
-    /**
-     * 定义线程组名称，在问题排查时，非常有帮助
-     *
-     * @param whatFeaturOfGroup 线程组名
-     */
-    YasoThreadFactory(String whatFeaturOfGroup) {
-        namePrefix = "From UserThreadFactory's " + whatFeaturOfGroup + "-Worker-";
-    }
-
-    @Override
-    public Thread newThread(Runnable task) {
-        String name = namePrefix + nextId.getAndIncrement();
-        Thread thread = new Thread(null, task, name, 0, false);
-        System.out.println(thread.getName());
-        return thread;
-    }
-}
