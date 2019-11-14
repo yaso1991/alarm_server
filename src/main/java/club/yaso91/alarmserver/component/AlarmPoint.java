@@ -8,6 +8,7 @@
 package club.yaso91.alarmserver.component;
 
 import lombok.Data;
+import lombok.NonNull;
 
 /**
  * @version: V1.0
@@ -19,7 +20,9 @@ import lombok.Data;
  **/
 @Data
 public class AlarmPoint {
+    @NonNull
     private String name;
+    @NonNull
     private String com;
     private boolean alarming;
 
