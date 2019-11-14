@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -158,10 +157,11 @@ public class AlarmStateService {
      */
     @Scheduled(cron = "0/50 * * * * ?")
     public void checkAndPushSumInfo() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
         SystemConfig localSystemConfig = localDataService.getLocalSystemConfig();
-        Time sumPushTime = localSystemConfig.getSumPushTime();
-        if (sumPushTime.getHours() == calendar.get(Calendar.HOUR_OF_DAY) && sumPushTime.getMinutes() == calendar.get(Calendar.MINUTE)) {
+        Calendar sumPushTime = Calendar.getInstance();
+        sumPushTime.setTime(localSystemConfig.getSumPushTime());
+        if (sumPushTime.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && sumPushTime.get(Calendar.MINUTE) == now.get(Calendar.MINUTE)) {
             pushSumInfo();
         }
     }
