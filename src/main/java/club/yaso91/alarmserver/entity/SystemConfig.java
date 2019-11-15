@@ -16,8 +16,17 @@ import java.sql.Time;
 @Data
 public class SystemConfig {
     private int id;
+    /**
+     * 班组长级推送延时.
+     */
     private int monitorPushDelay;
+    /**
+     * 主任级推送延时.
+     */
     private int masterPushDelay;
+    /**
+     * 经理级推送延时.
+     */
     private int managerPushDelay;
     private Time sumPushTime;
 }

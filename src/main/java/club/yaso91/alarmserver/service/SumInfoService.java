@@ -10,6 +10,7 @@ package club.yaso91.alarmserver.service;
 import club.yaso91.alarmserver.common.AlarmItemInfoExcelHandler;
 import club.yaso91.alarmserver.entity.AlarmItemInfo;
 import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -29,11 +29,13 @@ import java.util.ArrayList;
  * @data: 2019-10-07 15:47
  **/
 @Service
+@Slf4j
 public class SumInfoService {
     @Autowired
     AlarmItemInfoMapper alarmItemInfoMapper;
 
-    public ArrayList<AlarmItemInfo> getSumInfos(Timestamp beginTime, Timestamp endTime, String alarmName, String employeeName) {
+    public ArrayList<AlarmItemInfo> getSumInfos(Timestamp beginTime, Timestamp endTime, String alarmName,
+                                                String employeeName) {
         return alarmItemInfoMapper.selectSumInfos(beginTime, endTime, alarmName, employeeName);
     }
 
@@ -42,12 +44,21 @@ public class SumInfoService {
         return this.getSumInfos(null, null, null, null);
     }
 
-    public ByteArrayOutputStream exportSumInfos() throws IOException, ParseException {
+    /**
+     * 生成汇总信息的Excel文档.
+     *
+     * @return
+     */
+    public ByteArrayOutputStream exportSumInfos() {
         ArrayList<AlarmItemInfo> allSumInfos = this.getAllSumInfos();
         HSSFWorkbook workbook = new HSSFWorkbook();
-        AlarmItemInfoExcelHandler.generatorExcelBook(allSumInfos,workbook);
+        AlarmItemInfoExcelHandler.generatorExcelBook(allSumInfos, workbook);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        workbook.write(outputStream);
+        try {
+            workbook.write(outputStream);
+        } catch (IOException e) {
+            log.warn(e.toString());
+        }
         return outputStream;
     }
 }

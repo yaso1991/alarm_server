@@ -67,13 +67,18 @@ public class AlarmStateService {
         modbusManger.startCommunication();
     }
 
+    /**
+     * 定时从ModbusManager里读取报警信息.
+     */
     @Scheduled(initialDelay = 10000, fixedDelay = 1000)
     public void updateAlarmInfo() {
+        // 获取串口
         ArrayList<ModbusCom> coms = modbusManger.getComs();
         for (ModbusCom com : coms) {
             if (!com.isConnected()) {
                 continue;
             }
+
             HashMap<String, ModbusPoint> points = com.getPoints();
             for (String key : points.keySet()) {
                 ModbusPoint point = points.get(key);
@@ -100,15 +105,16 @@ public class AlarmStateService {
 
                     // 持续发生报警
                     boolean needPushing = false;
-                    // FIXME 这里需要时间,从数据库里导入
-                    if (alarmInfo.getAlarmSpan() >= 20 && "未推送".equals(alarmInfo.getPushLevel())) {
+                    // TODO 这里需要时间,从数据库里导入
+                    SystemConfig systemConfig = localDataService.getLocalSystemConfig();
+                    if (alarmInfo.getAlarmSpan() >= systemConfig.getMonitorPushDelay() && "未推送".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("班组长级");
                         needPushing = true;
-                    } else if (alarmInfo.getAlarmSpan() >= 40 && "班组长级".equals(alarmInfo.getPushLevel())) {
+                    } else if (alarmInfo.getAlarmSpan() >= systemConfig.getMasterPushDelay() && "班组长级".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("主任级");
                         needPushing = true;
 
-                    } else if (alarmInfo.getAlarmSpan() >= 60 && "主任级".equals(alarmInfo.getPushLevel())) {
+                    } else if (alarmInfo.getAlarmSpan() >= systemConfig.getManagerPushDelay() && "主任级".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("经理级");
                         needPushing = true;
                     }
@@ -141,6 +147,7 @@ public class AlarmStateService {
                         }
                     }
 
+                    // 存入数据库
                     alarmInfoMapper.updateAlarming(alarmInfo);
                     setItemInfo(alarmInfo, alarmItemInfo);
                     alarmItemInfoMapper.update(alarmItemInfo);
@@ -157,6 +164,7 @@ public class AlarmStateService {
      */
     @Scheduled(cron = "0/50 * * * * ?")
     public void checkAndPushSumInfo() {
+        // 如果时间点和设置的时间点相吻合,推送汇总信息
         Calendar now = Calendar.getInstance();
         SystemConfig localSystemConfig = localDataService.getLocalSystemConfig();
         Calendar sumPushTime = Calendar.getInstance();
@@ -166,7 +174,9 @@ public class AlarmStateService {
         }
     }
 
-
+    /**
+     * 推送汇总信息逻辑.
+     */
     private void pushSumInfo() {
         // 查询昨日报警记录
         ArrayList<AlarmItemInfo> alarmItemInfos =
@@ -239,7 +249,12 @@ public class AlarmStateService {
         }
     }
 
-
+    /**
+     * 根据发生报警的报警点信息生成报警条目信息.
+     *
+     * @param alarmInfo     发生报警的报警点
+     * @param alarmItemInfo 需要添加或更新的报警条目信息.
+     */
     private void setItemInfo(AlarmInfo alarmInfo, AlarmItemInfo alarmItemInfo) {
         alarmItemInfo.setAlarmInfo(alarmInfo);
         alarmItemInfo.setAlarmSpan(alarmInfo.getAlarmSpan());

@@ -28,7 +28,7 @@ public class SystemConfigService {
     private LocalDataService localDataService;
 
     @Autowired
-    public SystemConfigService(SystemConfigMapper systemConfigMapper,LocalDataService localDataService) {
+    public SystemConfigService(SystemConfigMapper systemConfigMapper, LocalDataService localDataService) {
         this.systemConfigMapper = systemConfigMapper;
         this.localDataService = localDataService;
         this.localDataService.setLocalSystemConfig(this.systemConfigMapper.selectAll());

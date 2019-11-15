@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class EmailSender {
     @Autowired
     private JavaMailSender mailSender;
-    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 60L, TimeUnit.SECONDS,
+    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 20, 60L, TimeUnit.SECONDS,
             new ArrayBlockingQueue<>(10), new ThreadFactoryBuilder().setNameFormat("emailSender").build());
 
     /**
