@@ -19,6 +19,7 @@ import lombok.Data;
  **/
 @Data
 public class ModbusPoint {
+
     private String name;
     private int deviceId = 1;
     private int code = 3;
@@ -26,11 +27,12 @@ public class ModbusPoint {
     private int count = 0;
     private String value;
     private String lastValue;
+
     /**
      * @title: ModbusPoint
      * @author: Yaso
      * @date: 2019-10-20 8:02
-     * @description:nihao
+     * @description: modbus设备里需要采集的数据点.
      * @param: name
      * @param: deviceId
      * @param: code
@@ -47,8 +49,13 @@ public class ModbusPoint {
         this.count = count;
     }
 
-    public void setValue(String value) {
-        if(this.value != value) {
+    /**
+     * 与setValue不同,update在更新当前值前,先将当前值赋值给lastValue.
+     *
+     * @param value
+     */
+    public void updateCurrentValue(String value) {
+        if (this.value != value) {
             this.setLastValue(this.value);
             this.value = value;
         }

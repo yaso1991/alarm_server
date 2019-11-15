@@ -9,6 +9,7 @@ package club.yaso91.alarmserver.component;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit;
  **/
 
 @Data
+@Slf4j
 public class ModbusManger {
     private ArrayList<ModbusCom> coms = new ArrayList<>();
     private ThreadPoolExecutor threadPoolExecutor;
@@ -59,7 +61,7 @@ public class ModbusManger {
                         try {
                             Thread.sleep(com.getMillis());
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            log.warn(e.toString());
                         }
                     }
                 }

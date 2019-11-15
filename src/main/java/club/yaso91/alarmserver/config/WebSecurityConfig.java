@@ -29,7 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @author: Yaso
  * @className: WebSecurityConfig
  * @packageName: club.yaso91.alarmserver.config
- * @description:
+ * @description: 系统安全权限配置.
  * @data: 2019-10-13 11:14
  **/
 @Configuration

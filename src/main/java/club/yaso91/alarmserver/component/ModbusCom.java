@@ -123,7 +123,7 @@ public class ModbusCom {
 
                 if (2 == code) {
                     ReadInputDiscretesResponse res = (ReadInputDiscretesResponse) trans.getResponse();
-                    point.setValue(String.valueOf(res.getDiscreteStatus(0)));
+                    point.updateCurrentValue(String.valueOf(res.getDiscreteStatus(0)));
                 } else if (3 == code) {
                     ReadMultipleRegistersResponse res = (ReadMultipleRegistersResponse) trans.getResponse();
 
@@ -132,7 +132,7 @@ public class ModbusCom {
                     for (int i = 0; i < BYTE_COUNT_OF_A_DOUBLE_WORD; i++) {
                         data[i] = message[i + 1];
                     }
-                    point.setValue(String.valueOf(ModbusUtil.registersToFloat(data)));
+                    point.updateCurrentValue(String.valueOf(ModbusUtil.registersToFloat(data)));
                 } else {
 
                 }

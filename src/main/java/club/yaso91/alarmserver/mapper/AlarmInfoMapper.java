@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * @title: AlarmInfoMapper
  * @package club.yaso91.alarmserver.mapper
- * @description: alarm_info mapper
+ * @description:
  * @author: Yaso
  * @date: 2019-11-14 15:48
  * @version: V1.0

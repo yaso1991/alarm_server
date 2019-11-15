@@ -32,7 +32,7 @@ public class WebSocketController {
     AlarmInfoService alarmInfoService;
 
     @Scheduled(initialDelay = 10000, fixedDelay = 1000)
-    public void greeting() throws Exception {
+    public void greeting(){
         ArrayList<AlarmInfo> alarmInfos = alarmInfoService.getAlarmInfos();
         simpMessagingTemplate.convertAndSend("/topic/greetings", alarmInfos);
     }

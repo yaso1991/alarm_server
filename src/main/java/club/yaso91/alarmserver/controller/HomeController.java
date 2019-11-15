@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @title: HomeController
  * @package club.yaso91.alarmserver.controller
- * @description: 主页controller.
+ * @description:
  * @author: Yaso
  * @date: 2019-11-14 15:51
  * @version: V1.0

@@ -18,7 +18,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  * @author: Yaso
  * @className: WebSocketConfig
  * @packageName: club.yaso91.alarmserver.config
- * @description:
+ * @description: webSocket配置.
  * @data: 2019-11-11 17:10
  **/
 @Configuration
