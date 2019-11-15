@@ -21,6 +21,13 @@ import java.time.ZoneOffset;
  * @data: 2019-10-16 20:37
  **/
 public class YasoUtils {
+    /**
+     * 生成密码的BCrypt编码.
+     *
+     * @param password
+     * @param encoderKey
+     * @return
+     */
     public static String genarateBcryptPasswordEncoder(String password, int encoderKey) {
         return new BCryptPasswordEncoder(4).encode(password);
     }

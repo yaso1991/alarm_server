@@ -20,6 +20,6 @@ public class EmailSenderTest {
 
     @Test
     public void sendPushMail() {
-        emailSender.sendPushMail("1441825297@qq.com","1721662545@qq.com","你好","你好,御厨哦哦");
+        emailSender.sendAlarmMail("1441825297@qq.com","1721662545@qq.com","你好","你好,御厨哦哦");
     }
 }

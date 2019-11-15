@@ -38,14 +38,12 @@ public class ModbusCom {
     private static final int DATABITS = 8;
     private static final int RATE = 9600;
     private static final int BYTE_COUNT_OF_A_DOUBLE_WORD = 4;
-
-
+    private final SerialParameters params = new SerialParameters();
     private AbstractSerialConnection com;
+    private int millis = 500;
     private String portName;
     private HashMap<String, ModbusPoint> points = new HashMap<>();
-    private int millis = 500;
     private boolean connected = false;
-    private final SerialParameters params = new SerialParameters();
 
 
     public ModbusCom(String portName) {
@@ -60,34 +58,46 @@ public class ModbusCom {
         params.setEcho(false);
     }
 
-
-    public void initAndOpenCom() {
+    /**
+     * 初始化并打开串口.
+     */
+    private void initAndOpenCom() {
         if (connected) {
             return;
         }
         com = new SerialConnection(params);
         try {
             com.open();
-            System.out.println(this.portName + " open success.");
+            log.info(this.portName + " open success.");
             connected = true;
         } catch (IOException e) {
-            System.out.println(this.portName + " open failed.");
+            log.warn(e.toString());
             connected = false;
         }
     }
 
+    /**
+     * 添加采集点
+     *
+     * @param point
+     */
     public void addPoint(ModbusPoint point) {
         points.put(point.getName(), point);
     }
 
+    /**
+     * 通过串口的modbus协议采集数据.
+     */
     public void comminucateWithModbus() {
-        if(!connected) {
-            System.out.println(this.portName  + " reconnecting...");
+        // 如果未连接,重新连接.
+        if (!connected) {
+            log.info(this.portName + " reconnecting...");
             initAndOpenCom();
             return;
         }
+
+        // 读取数据
         try {
-            //TODO 这里需要将keyset 改为entryset 提高性能.
             for (String key : points.keySet()) {
                 ModbusPoint point = points.get(key);
                 ModbusRequest req = null;
@@ -128,7 +138,6 @@ public class ModbusCom {
                 }
             }
         } catch (ModbusException e) {
-            // TODO 使用日志.
             log.warn(e.toString());
         }
     }

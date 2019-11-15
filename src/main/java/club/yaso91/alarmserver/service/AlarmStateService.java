@@ -133,10 +133,10 @@ public class AlarmStateService {
                                             + "当班员工:" + alarmInfo.getEmployee().getName() + ",工号:" + alarmInfo.getEmployee().getWorkId();
                             if (emails.size() > 1) {
                                 emails.remove(0);
-                                emailSender.sendPushMail(from, to, subject, context,
+                                emailSender.sendAlarmMail(from, to, subject, context,
                                         emails.toArray(new String[emails.size()]));
                             } else {
-                                emailSender.sendPushMail(from, to, subject, context);
+                                emailSender.sendAlarmMail(from, to, subject, context);
                             }
                         }
                     }

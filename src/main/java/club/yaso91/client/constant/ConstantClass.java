@@ -17,8 +17,5 @@ package club.yaso91.client.constant;
  **/
 public final class ConstantClass {
 
-    /**
-     * PI值.
-     */
-    public static final float PI = 3.1415926F;
+
 }

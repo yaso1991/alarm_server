@@ -7,6 +7,7 @@
  */
 package club.yaso91.alarmserver.component;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,9 +34,18 @@ public class EmailSender {
     @Autowired
     private JavaMailSender mailSender;
     private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 60L, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<>(10), new YasoThreadFactory("emailSender"));
+            new ArrayBlockingQueue<>(10), new ThreadFactoryBuilder().setNameFormat("emailSender").build());
 
-    public void sendPushMail(String from, String to, String subject, String context, String... cc) {
+    /**
+     * 推送报警信息邮件.
+     *
+     * @param from
+     * @param to
+     * @param subject
+     * @param context
+     * @param cc      抄送
+     */
+    public void sendAlarmMail(String from, String to, String subject, String context, String... cc) {
         threadPoolExecutor.submit(new Runnable() {
             @Override
             public void run() {
@@ -50,6 +60,16 @@ public class EmailSender {
         });
     }
 
+    /**
+     * 推送前日汇总邮件.
+     *
+     * @param file
+     * @param from
+     * @param to
+     * @param subject
+     * @param context
+     * @param cc
+     */
     public void sendSumInfoMail(File file, String from, String to, String subject, String context,
                                 String... cc) {
         threadPoolExecutor.submit(new Runnable() {
