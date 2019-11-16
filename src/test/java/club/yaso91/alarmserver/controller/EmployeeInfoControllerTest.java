@@ -1,6 +1,6 @@
 package club.yaso91.alarmserver.controller;
 
-import club.yaso91.alarmserver.entity.Employee;
+import club.yaso91.alarmserver.domain.Employee;
 import com.alibaba.fastjson.JSON;
 import org.junit.Before;
 import org.junit.Test;

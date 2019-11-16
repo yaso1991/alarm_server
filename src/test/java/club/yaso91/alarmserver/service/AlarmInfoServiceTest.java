@@ -1,6 +1,6 @@
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.entity.AlarmInfo;
+import club.yaso91.alarmserver.domain.AlarmInfo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 /**
  * projectName: alarmserver
  * fileName: YasoUtils.java
- * packageName: club.yaso91.alarmserver.common
+ * packageName: club.yaso91.alarmserver.service.common
  * date: 2019-10-16 20:37
  * copyright(c) 2017-2020 FuYun design studio.
  */
@@ -16,7 +16,7 @@ import java.time.ZoneOffset;
  * @version: V1.0
  * @author: Yaso
  * @className: YasoUtils
- * @packageName: club.yaso91.alarmserver.common
+ * @packageName: club.yaso91.alarmserver.service.common
  * @description: Yaso的工具类.
  * @data: 2019-10-16 20:37
  **/

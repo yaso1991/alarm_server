@@ -8,7 +8,7 @@
 
 package club.yaso91.alarmserver.mapper;
 
-import club.yaso91.alarmserver.entity.AlarmInfo;
+import club.yaso91.alarmserver.domain.AlarmInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

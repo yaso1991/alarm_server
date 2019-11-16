@@ -7,7 +7,7 @@
  */
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.entity.SystemConfig;
+import club.yaso91.alarmserver.domain.SystemConfig;
 import club.yaso91.alarmserver.mapper.SystemConfigMapper;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

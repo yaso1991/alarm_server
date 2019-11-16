@@ -7,8 +7,8 @@
  */
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.entity.AlarmInfo;
-import club.yaso91.alarmserver.entity.CardReader;
+import club.yaso91.alarmserver.domain.AlarmInfo;
+import club.yaso91.alarmserver.domain.CardReader;
 import club.yaso91.alarmserver.mapper.AlarmInfoMapper;
 import club.yaso91.alarmserver.mapper.CardReaderMapper;
 import org.springframework.beans.factory.annotation.Autowired;

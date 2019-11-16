@@ -5,7 +5,7 @@
  * date: 2019-10-19 15:57
  * copyright(c) 2017-2020 FuYun design studio.
  */
-package club.yaso91.alarmserver.component;
+package club.yaso91.alarmserver.service.component;
 
 import lombok.Data;
 import lombok.NonNull;

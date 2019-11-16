@@ -1,4 +1,4 @@
-package club.yaso91.alarmserver.component;
+package club.yaso91.alarmserver.service.component;
 
 import org.junit.Before;
 import org.junit.Test;

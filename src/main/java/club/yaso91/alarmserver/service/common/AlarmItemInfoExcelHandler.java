@@ -5,9 +5,9 @@
  *    Date:2019/11/14 下午4:00
  *    Author:Yaso
  */
-package club.yaso91.alarmserver.common;
+package club.yaso91.alarmserver.service.common;
 
-import club.yaso91.alarmserver.entity.AlarmItemInfo;
+import club.yaso91.alarmserver.domain.AlarmItemInfo;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * @version: V1.0
  * @author: Yaso
  * @className: ExcelHandler
- * @packageName: club.yaso91.alarmserver.common
+ * @packageName: club.yaso91.alarmserver.service.common
  * @description: 汇总excel处理类.
  * @data: 2019-11-14 15:59
  **/

@@ -38,7 +38,7 @@
         </foreach>
     </delete>
 
-    <select id="selectAll" resultType="club.yaso91.alarmserver.entity.Employee">
+    <select id="selectAll" resultType="club.yaso91.alarmserver.domain.Employee">
         select
             id,
             name,

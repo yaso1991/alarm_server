@@ -7,7 +7,7 @@
  */
 package club.yaso91.alarmserver.controller;
 
-import club.yaso91.alarmserver.entity.AlarmItemInfo;
+import club.yaso91.alarmserver.domain.AlarmItemInfo;
 import club.yaso91.alarmserver.service.SumInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

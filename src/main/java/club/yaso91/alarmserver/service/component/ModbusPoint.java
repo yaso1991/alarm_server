@@ -1,11 +1,11 @@
 /**
  * projectName: alarmserver
  * fileName: ModbusPoint.java
- * packageName: club.yaso91.alarmserver.component
+ * packageName: club.yaso91.alarmserver.service.component
  * date: 2019-10-19 18:58
  * copyright(c) 2017-2020 FuYun design studio.
  */
-package club.yaso91.alarmserver.component;
+package club.yaso91.alarmserver.service.component;
 
 import lombok.Data;
 
@@ -13,7 +13,7 @@ import lombok.Data;
  * @version: V1.0
  * @author: Yaso
  * @className: ModbusPoint
- * @packageName: club.yaso91.alarmserver.component
+ * @packageName: club.yaso91.alarmserver.service.component
  * @description:
  * @data: 2019-10-19 18:58
  **/

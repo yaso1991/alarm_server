@@ -7,14 +7,14 @@
  */
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.common.AlarmItemInfoExcelHandler;
-import club.yaso91.alarmserver.component.EmailSender;
-import club.yaso91.alarmserver.component.ModbusCom;
-import club.yaso91.alarmserver.component.ModbusManger;
-import club.yaso91.alarmserver.component.ModbusPoint;
-import club.yaso91.alarmserver.entity.AlarmInfo;
-import club.yaso91.alarmserver.entity.AlarmItemInfo;
-import club.yaso91.alarmserver.entity.SystemConfig;
+import club.yaso91.alarmserver.service.common.AlarmItemInfoExcelHandler;
+import club.yaso91.alarmserver.service.component.EmailSender;
+import club.yaso91.alarmserver.service.component.ModbusCom;
+import club.yaso91.alarmserver.service.component.ModbusManger;
+import club.yaso91.alarmserver.service.component.ModbusPoint;
+import club.yaso91.alarmserver.domain.AlarmInfo;
+import club.yaso91.alarmserver.domain.AlarmItemInfo;
+import club.yaso91.alarmserver.domain.SystemConfig;
 import club.yaso91.alarmserver.mapper.AlarmInfoMapper;
 import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
 import club.yaso91.alarmserver.mapper.EmployeeInfoMapper;
@@ -65,6 +65,7 @@ public class AlarmStateService {
         init();
     }
 
+    // TODO service不允许自己启动.必须由上层启动.
     private void init() {
         // 开始读取串口数据.
         modbusManger.startCommunication();

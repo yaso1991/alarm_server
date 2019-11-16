@@ -6,7 +6,7 @@
  *    Author:Yaso
  */
 
-package club.yaso91.alarmserver.entity;
+package club.yaso91.alarmserver.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 /**
  * @title: Manager
- * @package club.yaso91.alarmserver.entity
+ * @package club.yaso91.alarmserver.domain
  * @description: 用户权限DO,配合spring security使用.
  * @author: Yaso
  * @date: 2019-11-14 15:52

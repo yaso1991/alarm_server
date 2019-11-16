@@ -1,11 +1,11 @@
 /**
  * projectName: alarmserver
  * fileName: AlarmItemInfo.java
- * packageName: club.yaso91.alarmserver.entity
+ * packageName: club.yaso91.alarmserver.domain
  * date: 2019-10-07 14:24
  * copyright(c) 2017-2020 FuYun design studio.
  */
-package club.yaso91.alarmserver.entity;
+package club.yaso91.alarmserver.domain;
 
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import java.sql.Timestamp;
  * @version: V1.0
  * @author: Yaso
  * @className: AlarmItemInfo
- * @packageName: club.yaso91.alarmserver.entity
+ * @packageName: club.yaso91.alarmserver.domain
  * @description:
  * @data: 2019-10-07 14:24
  **/

@@ -7,7 +7,7 @@
  */
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.entity.SystemConfig;
+import club.yaso91.alarmserver.domain.SystemConfig;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 

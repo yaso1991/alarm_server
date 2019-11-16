@@ -7,7 +7,7 @@
  */
 package club.yaso91.alarmserver.controller;
 
-import club.yaso91.alarmserver.entity.Employee;
+import club.yaso91.alarmserver.domain.Employee;
 import club.yaso91.alarmserver.service.EmployeeInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,11 +1,11 @@
 /**
  * projectName: alarmserver
  * fileName: ModbusManger.java
- * packageName: club.yaso91.alarmserver.component
+ * packageName: club.yaso91.alarmserver.service.component
  * date: 2019-10-19 18:49
  * copyright(c) 2017-2020 FuYun design studio.
  */
-package club.yaso91.alarmserver.component;
+package club.yaso91.alarmserver.service.component;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Data;
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @version: V1.0
  * @author: Yaso
  * @className: ModbusManger
- * @packageName: club.yaso91.alarmserver.component
+ * @packageName: club.yaso91.alarmserver.service.component
  * @description: 串口管理
  * TODO 等注解完成后,对ModbusManager,和AlarmStateService进行整合.
  * @data: 2019-10-19 18:49

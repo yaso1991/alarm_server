@@ -1,4 +1,4 @@
-package club.yaso91.alarmserver.entity;
+package club.yaso91.alarmserver.domain;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import java.sql.Time;
 
 /**
  * @title: SystemConfig
- * @package club.yaso91.alarmserver.entity
+ * @package club.yaso91.alarmserver.domain
  * @description:
  * @author: Yaso
  * @date: 2019-102-11 14:02

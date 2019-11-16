@@ -3,7 +3,7 @@
 <mapper namespace="club.yaso91.alarmserver.mapper.CardReaderMapper">
 
 
-    <select id="selectAll" resultType="club.yaso91.alarmserver.entity.CardReader">
+    <select id="selectAll" resultType="club.yaso91.alarmserver.domain.CardReader">
         select * from card_reader_info
     </select>
 </mapper>

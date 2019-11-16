@@ -7,7 +7,7 @@
  */
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.entity.Employee;
+import club.yaso91.alarmserver.domain.Employee;
 import club.yaso91.alarmserver.mapper.EmployeeInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

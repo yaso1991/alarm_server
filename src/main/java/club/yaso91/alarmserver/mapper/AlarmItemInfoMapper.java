@@ -7,7 +7,7 @@
  */
 package club.yaso91.alarmserver.mapper;
 
-import club.yaso91.alarmserver.entity.AlarmItemInfo;
+import club.yaso91.alarmserver.domain.AlarmItemInfo;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;

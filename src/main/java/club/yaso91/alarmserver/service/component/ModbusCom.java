@@ -1,11 +1,11 @@
 /**
  * projectName: alarmserver
  * fileName: CurrentAlarmStateReader.java
- * packageName: club.yaso91.alarmserver.component
+ * packageName: club.yaso91.alarmserver.service.component
  * date: 2019-10-19 15:53
  * copyright(c) 2017-2020 FuYun design studio.
  */
-package club.yaso91.alarmserver.component;
+package club.yaso91.alarmserver.service.component;
 
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
@@ -25,7 +25,7 @@ import java.util.HashMap;
  * @version: V1.0
  * @author: Yaso
  * @className: CurrentAlarmStateReader
- * @packageName: club.yaso91.alarmserver.component
+ * @packageName: club.yaso91.alarmserver.service.component
  * @description: 使用modbus实时读取报警点数据.
  * @data: 2019-10-19 15:53
  **/

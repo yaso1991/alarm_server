@@ -1,6 +1,6 @@
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.entity.Employee;
+import club.yaso91.alarmserver.domain.Employee;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

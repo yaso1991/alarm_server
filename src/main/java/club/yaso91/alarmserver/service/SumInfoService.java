@@ -7,8 +7,8 @@
  */
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.common.AlarmItemInfoExcelHandler;
-import club.yaso91.alarmserver.entity.AlarmItemInfo;
+import club.yaso91.alarmserver.service.common.AlarmItemInfoExcelHandler;
+import club.yaso91.alarmserver.domain.AlarmItemInfo;
 import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;

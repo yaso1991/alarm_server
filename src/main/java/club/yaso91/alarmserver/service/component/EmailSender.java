@@ -1,11 +1,11 @@
 /**
  * projectName: alarmserver
  * fileName: EmailSender.java
- * packageName: club.yaso91.alarmserver.component
+ * packageName: club.yaso91.alarmserver.service.component
  * date: 2019-10-17 18:25
  * copyright(c) 2017-2020 FuYun design studio.
  */
-package club.yaso91.alarmserver.component;
+package club.yaso91.alarmserver.service.component;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @version: V1.0
  * @author: Yaso
  * @className: EmailSender
- * @packageName: club.yaso91.alarmserver.component
+ * @packageName: club.yaso91.alarmserver.service.component
  * @description: 邮件控制类
  * @data: 2019-10-17 18:25
  **/

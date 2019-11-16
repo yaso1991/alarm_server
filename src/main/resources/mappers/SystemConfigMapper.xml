@@ -13,7 +13,7 @@
             id = 1;
     </update>
 
-    <select id="selectAll" resultType="club.yaso91.alarmserver.entity.SystemConfig">
+    <select id="selectAll" resultType="club.yaso91.alarmserver.domain.SystemConfig">
         select
             id,
             monitor_push_delay as monitorPushDelay,
