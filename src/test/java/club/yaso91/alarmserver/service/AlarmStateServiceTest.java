@@ -37,7 +37,7 @@ public class AlarmStateServiceTest {
 
     @Test
     public void pushSumInfo() {
-        alarmStateService.pushSumInfo();
+//        alarmStateService.pushSumInfo();
         try {
             Thread.currentThread().join(5000);
         } catch (InterruptedException e) {

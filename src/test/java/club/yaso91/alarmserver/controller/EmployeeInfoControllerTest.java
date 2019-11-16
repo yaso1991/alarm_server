@@ -51,7 +51,7 @@ public class EmployeeInfoControllerTest {
     public void addEmployee() throws Exception {
         Employee employee = new Employee();
         employee.setName("员工C");
-        employee.setWorkId("123456789");
+        employee.setWorkId("1234567890");
         employee.setPosition("员工");
         employee.setEmail("1721662545@qq.com");
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/employeeInfo/addEmployee")
@@ -69,9 +69,9 @@ public class EmployeeInfoControllerTest {
     @Test
     public void fixEmployee() throws Exception {
         Employee employee = new Employee();
-        employee.setId(28);
+        employee.setId(23);
         employee.setName("员工E");
-        employee.setWorkId("123456789");
+        employee.setWorkId("1234567890");
         employee.setPosition("员工");
         employee.setEmail("1721662545@qq.com");
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/employeeInfo/fixEmployee")
@@ -89,8 +89,8 @@ public class EmployeeInfoControllerTest {
     @Test
     public void deleteEmployees() throws Exception {
         ArrayList<Integer> ids = new ArrayList<>();
-        ids.add(28);
-        ids.add(27);
+        ids.add(22);
+        ids.add(23);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/employeeInfo/deleteEmployees")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JSON.toJSONString(ids));

@@ -35,29 +35,23 @@ public class SumInfoServiceTest {
         assertEquals(true, !sumInfos.isEmpty());
 
         Calendar calendarBegin = Calendar.getInstance();
-        calendarBegin.set(2019,8,25);
+        calendarBegin.set(2019,10,10);
         Timestamp begin = new Timestamp(calendarBegin.getTimeInMillis());
         Calendar calendarEnd = Calendar.getInstance();
-        calendarEnd.set(2019,8,28);
+        calendarEnd.set(2019,10,16);
         Timestamp end = new Timestamp(calendarEnd.getTimeInMillis());
 
         sumInfos = sumInfoService.getSumInfos(begin, end, null, null);
         System.out.println(sumInfos.toString());
         assertEquals(true, !sumInfos.isEmpty());
 
-        sumInfos = sumInfoService.getSumInfos(null, null, "7号线中轧测厚", null);
+        sumInfos = sumInfoService.getSumInfos(null, null, "2#报警点", null);
         System.out.println(sumInfos.toString());
         assertEquals(true, !sumInfos.isEmpty());
 
-        sumInfos = sumInfoService.getSumInfos(null, null, null, "员工A");
+        sumInfos = sumInfoService.getSumInfos(null, null, null, "员工1");
         System.out.println(sumInfos.toString());
         assertEquals(true, !sumInfos.isEmpty());
-
-
-
-
-
-
     }
 
     @Test

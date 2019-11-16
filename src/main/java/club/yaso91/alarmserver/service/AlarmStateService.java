@@ -180,7 +180,7 @@ public class AlarmStateService {
     /**
      * 推送汇总信息逻辑.
      */
-    public void pushSumInfo() {
+    private void pushSumInfo() {
         // 查询昨日报警记录
         long yestodayMills = YasoUtils.getYestodayMills() * 1000;
         Timestamp beginTime = new Timestamp(yestodayMills);

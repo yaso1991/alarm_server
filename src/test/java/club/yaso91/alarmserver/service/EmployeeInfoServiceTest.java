@@ -28,14 +28,14 @@ public class EmployeeInfoServiceTest {
     public void loadAllEmployees() {
         ArrayList<Employee> employees = employeeInfoService.loadAllEmployees();
         assertEquals(true, !employees.isEmpty());
-        assertEquals("组长1", employees.get(3).getName());
+        assertEquals("班组长2", employees.get(3).getName());
     }
 
     @Test
     public void addEmployee() {
         Employee employee = new Employee();
         employee.setName("员工C");
-        employee.setWorkId("123456789");
+        employee.setWorkId("1234567890");
         employee.setPosition("员工");
         employee.setEmail("1721662545@qq.com");
         assertEquals(true, employeeInfoService.addEmployee(employee));
