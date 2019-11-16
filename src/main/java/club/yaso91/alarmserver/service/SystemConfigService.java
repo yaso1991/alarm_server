@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 @Data
 public class SystemConfigService {
     private SystemConfigMapper systemConfigMapper;
+    // FIXME 这里 service要不要调用另外一个service?
     private LocalDataService localDataService;
 
     @Autowired

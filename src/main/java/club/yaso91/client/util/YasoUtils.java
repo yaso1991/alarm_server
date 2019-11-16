@@ -35,12 +35,12 @@ public class YasoUtils {
     /**
      * 返回昨天的时间值,从昨天00:00:00.000开始
      *
-     * @return 昨天的时间戳, 00:00:00.000开始
+     * @return 昨天的时间戳, 00:00:00.000开始,注意是秒为单位.如果使用毫秒,需要乘以1000.
      */
     public static long getYestodayMills() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime yestoday =
                 LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 0, 0, 0).minusHours(24);
-        return yestoday.toEpochSecond(ZoneOffset.UTC);
+        return yestoday.toEpochSecond(ZoneOffset.ofHours(8));
     }
 }

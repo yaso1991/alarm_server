@@ -19,6 +19,7 @@ import club.yaso91.alarmserver.mapper.AlarmInfoMapper;
 import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
 import club.yaso91.alarmserver.mapper.EmployeeInfoMapper;
 import club.yaso91.client.util.YasoUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,7 +45,9 @@ import java.util.HashMap;
  * @data: 2019-10-22 19:21
  **/
 @Service
+@Slf4j
 public class AlarmStateService {
+    private final String SUM_INFO_DIR = "../sumInfos/";
     private ModbusManger modbusManger = new ModbusManger();
 
     @Autowired
@@ -177,23 +180,25 @@ public class AlarmStateService {
     /**
      * 推送汇总信息逻辑.
      */
-    private void pushSumInfo() {
+    public void pushSumInfo() {
         // 查询昨日报警记录
+        long yestodayMills = YasoUtils.getYestodayMills() * 1000;
+        Timestamp beginTime = new Timestamp(yestodayMills);
+        Timestamp endTime = new Timestamp(yestodayMills + 86399999);
         ArrayList<AlarmItemInfo> alarmItemInfos =
-                alarmItemInfoMapper.selectSumInfos(new Timestamp(YasoUtils.getYestodayMills()),
-                        new Timestamp(YasoUtils.getYestodayMills() + 86399999), null, null);
+                alarmItemInfoMapper.selectSumInfos(beginTime,
+                        endTime, null, null);
 
         // 生成EXCEL报表
         HSSFWorkbook workbook = new HSSFWorkbook();
         AlarmItemInfoExcelHandler.generatorExcelBook(alarmItemInfos, workbook);
 
         // EXCEL报表保存到本地
-        String dir = "sumInfos/";
         String fileName =
-                "/报警汇总" + new SimpleDateFormat("yyyy_MM_dd").format(new Date(YasoUtils.getYestodayMills())) +
+                "/报警汇总" + new SimpleDateFormat("yyyy_MM_dd").format(new Date(yestodayMills)) +
                         ".xls";
         File file = null;
-        File fileDir = new File(dir);
+        File fileDir = new File(SUM_INFO_DIR);
         if (!fileDir.exists()) {
             fileDir.mkdir();
         }
@@ -203,18 +208,17 @@ public class AlarmStateService {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.warn(e.toString());
             }
         }
         FileOutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(file);
             workbook.write(outputStream);
-
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.warn(e.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn(e.toString());
         } finally {
             //关闭流.
             if (null != outputStream) {
@@ -236,15 +240,15 @@ public class AlarmStateService {
         if (emails.size() == 1) {
             emailSender.sendSumInfoMail(file, "1441825297@qq.com", emails.get(0), fileName.replace(".xls",
                     ""),
-                    new Timestamp(YasoUtils.getYestodayMills()).toString() + "报警汇总,详见电子邮件的附件.");
+                    beginTime.toString() + "报警汇总,详见电子邮件的附件.");
             return;
         }
         if (emails.size() > 1) {
             String to = emails.get(0);
             emails.remove(0);
             emailSender.sendSumInfoMail(file, "1441825297@qq.com", to,
-                    new Timestamp(YasoUtils.getYestodayMills()).toString() + "报警汇总",
-                    new Timestamp(YasoUtils.getYestodayMills()).toString() + "报警汇总,详见电子邮件的附件.",
+                    beginTime.toString() + "报警汇总",
+                    beginTime.toString() + "报警汇总,详见电子邮件的附件.",
                     emails.toArray(new String[emails.size()]));
         }
     }

@@ -27,41 +27,21 @@ public class AlarmStateServiceTest {
     public void tearDown() throws Exception {
     }
 
-    @Test
-    public void testClass() {
-        try {
-            Thread.currentThread().join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
-    @Test
-    public void updateAlarmInfo() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    alarmStateService.updateAlarmInfo();
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        }).start();
-
-        try {
-            Thread.currentThread().join(90000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Test
     public void checkAndPushSumInfo() {
         alarmStateService.checkAndPushSumInfo();
+    }
+
+
+    @Test
+    public void pushSumInfo() {
+        alarmStateService.pushSumInfo();
+        try {
+            Thread.currentThread().join(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
