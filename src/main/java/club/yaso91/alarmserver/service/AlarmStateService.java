@@ -108,7 +108,6 @@ public class AlarmStateService {
 
                     // 持续发生报警
                     boolean needPushing = false;
-                    // TODO 这里需要时间,从数据库里导入
                     SystemConfig systemConfig = localDataService.getLocalSystemConfig();
                     if (alarmInfo.getAlarmSpan() >= systemConfig.getMonitorPushDelay() && "未推送".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("班组长级");
