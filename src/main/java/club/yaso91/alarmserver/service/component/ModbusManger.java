@@ -23,24 +23,13 @@ import java.util.concurrent.TimeUnit;
  * @className: ModbusManger
  * @packageName: club.yaso91.alarmserver.service.component
  * @description: 串口管理
- * TODO 等注解完成后,对ModbusManager,和AlarmStateService进行整合.
  * @data: 2019-10-19 18:49
  **/
-
 @Data
 @Slf4j
 public class ModbusManger {
     private ArrayList<ModbusCom> coms = new ArrayList<>();
     private ThreadPoolExecutor threadPoolExecutor;
-
-    public ModbusManger() {
-        // TODO 串口数量和点配置使用数据库保存.在数据库里建表.
-        // 添加串口和点信息.
-//        ModbusCom com11 = new ModbusCom("COM11");
-//        com11.addPoint(new ModbusPoint("1#报警点", 17, 2, 34, 1));
-//        com11.addPoint(new ModbusPoint("2#报警点", 17, 2, 31, 1));
-//        coms.add(com11);
-    }
 
     /**
      * 根据数据库点位信息,添加点位.
