@@ -21,10 +21,10 @@ import lombok.Data;
 public class ModbusPoint {
 
     private String name;
-    private int deviceId = 1;
-    private int code = 3;
-    private int ref = 0;
-    private int count = 0;
+    private int deviceId;
+    private int code;
+    private int ref;
+    private int count;
     private String value;
     private String lastValue;
 
