@@ -1,9 +1,9 @@
-/**
- * projectName: alarmserver
- * fileName: ManagerService.java
- * packageName: club.yaso91.alarmserver.service
- * date: 2019-10-05 11:35
- * copyright(c) 2017-2020 FuYun design studio.
+/*
+ * Copyright(c)2002-2019, 雅俗工作室.
+ *    项目名称:alarm_server
+ *    文件名称:ManagerServiceImpl.java
+ *    Date:2019/11/17 上午11:13
+ *    Author:Yaso
  */
 package club.yaso91.alarmserver.service;
 

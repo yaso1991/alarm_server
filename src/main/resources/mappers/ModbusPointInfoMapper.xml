@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.yaso91.alarmserver.mapper.ModbusPointInfoMapper">
+    <resultMap id="advModbusPointInfo" type="club.yaso91.alarmserver.domain.ModbusPointInfo">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <result property="count" column="count"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="ref" column="ref"/>
+        <association property="comInfo" javaType="club.yaso91.alarmserver.domain.ComInfo">
+            <id property="id" column="c_id"/>
+            <result property="name" column="c_name"/>
+        </association>
+    </resultMap>
+    <select id="selectAll" resultType="club.yaso91.alarmserver.domain.ModbusPointInfo" resultMap="advModbusPointInfo">
+        select m.*,c.id as c_id,c.name as c_name from modbuspoint_info m,com_info c where m.com_id = c.id;
+    </select>
+</mapper>

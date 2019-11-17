@@ -7,6 +7,7 @@
  */
 package club.yaso91.alarmserver.service.component;
 
+import club.yaso91.alarmserver.domain.ModbusPointInfo;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -32,26 +33,40 @@ public class ModbusManger {
     private ArrayList<ModbusCom> coms = new ArrayList<>();
     private ThreadPoolExecutor threadPoolExecutor;
 
-
     public ModbusManger() {
         // TODO 串口数量和点配置使用数据库保存.在数据库里建表.
         // 添加串口和点信息.
-        ModbusCom com11 = new ModbusCom("COM11");
-        com11.addPoint(new ModbusPoint("1#报警点", 17, 2, 34, 1));
-        com11.addPoint(new ModbusPoint("2#报警点", 17, 2, 31, 1));
-        coms.add(com11);
+//        ModbusCom com11 = new ModbusCom("COM11");
+//        com11.addPoint(new ModbusPoint("1#报警点", 17, 2, 34, 1));
+//        com11.addPoint(new ModbusPoint("2#报警点", 17, 2, 31, 1));
+//        coms.add(com11);
+    }
 
-        // 根据串口数量初始化线程池.固定size个线程.
-        int size = coms.size();
-        threadPoolExecutor = new ThreadPoolExecutor(size, size + 10, 60L, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<>(10), new ThreadFactoryBuilder().setNameFormat("modbus-%d").build());
-
+    /**
+     * 根据数据库点位信息,添加点位.
+     *
+     * @param modbusPointInfos
+     */
+    public void addPoints(ArrayList<ModbusPointInfo> modbusPointInfos) {
+        for (ModbusPointInfo modbusPointInfo : modbusPointInfos) {
+            ModbusCom newCom = new ModbusCom(modbusPointInfo.getComInfo().getName());
+            if (!coms.contains(newCom)) {
+                this.coms.add(newCom);
+            }
+            ModbusPoint point = new ModbusPoint(modbusPointInfo.getName(), modbusPointInfo.getDeviceId(),
+                    modbusPointInfo.getCode(), modbusPointInfo.getRef(), modbusPointInfo.getCount());
+            coms.get(coms.indexOf(newCom)).addPoint(point);
+        }
     }
 
     /**
      * 开始通信.
      */
     public void startCommunication() {
+        // 根据串口数量初始化线程池.固定size个线程.
+        int size = coms.size();
+        threadPoolExecutor = new ThreadPoolExecutor(size, size + 10, 60L, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(10), new ThreadFactoryBuilder().setNameFormat("modbus-%d").build());
         for (ModbusCom com : coms) {
             threadPoolExecutor.submit(new Runnable() {
                 @Override

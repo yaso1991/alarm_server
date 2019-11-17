@@ -9,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.Assert.assertEquals;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class AlarmStateServiceTest {
     @Autowired
     AlarmStateService alarmStateService;
-
-    @Autowired
-    AlarmItemInfoMapper alarmItemInfoMapper;
 
     @Before
     public void setUp() throws Exception {
@@ -43,5 +41,10 @@ public class AlarmStateServiceTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void init() {
+//        assertEquals(16,alarmStateService.getModbusManger().getComs().size());
     }
 }

@@ -15,6 +15,7 @@ import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
 import com.ghgande.j2mod.modbus.net.SerialConnection;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
+import com.google.common.base.Objects;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,7 +46,6 @@ public class ModbusCom {
     private HashMap<String, ModbusPoint> points = new HashMap<>();
     private boolean connected = false;
 
-
     public ModbusCom(String portName) {
         this.portName = portName;
 
@@ -56,6 +56,23 @@ public class ModbusCom {
         params.setStopbits(STOP_BITS);
         params.setEncoding(SERIAL_ENCODING_RTU);
         params.setEcho(false);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ModbusCom modbusCom = (ModbusCom) o;
+        return Objects.equal(portName, modbusCom.portName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(portName);
     }
 
     /**

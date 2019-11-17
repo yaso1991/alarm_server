@@ -1,24 +1,27 @@
-/**
- * projectName: alarmserver
- * fileName: AlarmGatheringService.java
- * packageName: club.yaso91.alarmserver.service
- * date: 2019-10-22 19:21
- * copyright(c) 2017-2020 FuYun design studio.
+/*
+ * Copyright(c)2002-2019, 雅俗工作室.
+ *    项目名称:alarm_server
+ *    文件名称:AlarmStateService.java
+ *    Date:2019/11/17 上午11:13
+ *    Author:Yaso
  */
 package club.yaso91.alarmserver.service;
 
+import club.yaso91.alarmserver.domain.AlarmInfo;
+import club.yaso91.alarmserver.domain.AlarmItemInfo;
+import club.yaso91.alarmserver.domain.ModbusPointInfo;
+import club.yaso91.alarmserver.domain.SystemConfig;
+import club.yaso91.alarmserver.mapper.AlarmInfoMapper;
+import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
+import club.yaso91.alarmserver.mapper.EmployeeInfoMapper;
+import club.yaso91.alarmserver.mapper.ModbusPointInfoMapper;
 import club.yaso91.alarmserver.service.common.AlarmItemInfoExcelHandler;
 import club.yaso91.alarmserver.service.component.EmailSender;
 import club.yaso91.alarmserver.service.component.ModbusCom;
 import club.yaso91.alarmserver.service.component.ModbusManger;
 import club.yaso91.alarmserver.service.component.ModbusPoint;
-import club.yaso91.alarmserver.domain.AlarmInfo;
-import club.yaso91.alarmserver.domain.AlarmItemInfo;
-import club.yaso91.alarmserver.domain.SystemConfig;
-import club.yaso91.alarmserver.mapper.AlarmInfoMapper;
-import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
-import club.yaso91.alarmserver.mapper.EmployeeInfoMapper;
 import club.yaso91.client.util.YasoUtils;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,26 +51,29 @@ import java.util.HashMap;
 @Slf4j
 public class AlarmStateService {
     private final String SUM_INFO_DIR = "../sumInfos/";
-    private ModbusManger modbusManger = new ModbusManger();
-
-    @Autowired
+    private ModbusManger modbusManger = null;
     private AlarmInfoMapper alarmInfoMapper;
-    @Autowired
     private AlarmItemInfoMapper alarmItemInfoMapper;
-    @Autowired
     private EmailSender emailSender;
-    @Autowired
     private EmployeeInfoMapper employeeInfoMapper;
-    @Autowired
     private LocalDataService localDataService;
+    private ModbusPointInfoMapper modbusPointInfoMapper;
 
-    public AlarmStateService() {
-        init();
-    }
+    @Autowired
+    public AlarmStateService(AlarmInfoMapper alarmInfoMapper,AlarmItemInfoMapper alarmItemInfoMapper,
+                             EmailSender emailSender,EmployeeInfoMapper employeeInfoMapper,
+                             LocalDataService localDataService,ModbusPointInfoMapper modbusPointInfoMapper) {
+        this.alarmInfoMapper = alarmInfoMapper;
+        this.alarmItemInfoMapper = alarmItemInfoMapper;
+        this.emailSender = emailSender;
+        this.employeeInfoMapper = employeeInfoMapper;
+        this.localDataService = localDataService;
+        this.modbusPointInfoMapper = modbusPointInfoMapper;
+        modbusManger = new ModbusManger();
 
-    // TODO service不允许自己启动.必须由上层启动.
-    private void init() {
-        // 开始读取串口数据.
+        // 读取数据库数据点信息.
+        modbusManger.addPoints(this.modbusPointInfoMapper.selectAll());
+
         modbusManger.startCommunication();
     }
 
