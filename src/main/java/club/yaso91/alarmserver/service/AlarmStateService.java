@@ -9,7 +9,6 @@ package club.yaso91.alarmserver.service;
 
 import club.yaso91.alarmserver.domain.AlarmInfo;
 import club.yaso91.alarmserver.domain.AlarmItemInfo;
-import club.yaso91.alarmserver.domain.ModbusPointInfo;
 import club.yaso91.alarmserver.domain.SystemConfig;
 import club.yaso91.alarmserver.mapper.AlarmInfoMapper;
 import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
@@ -21,7 +20,6 @@ import club.yaso91.alarmserver.service.component.ModbusCom;
 import club.yaso91.alarmserver.service.component.ModbusManger;
 import club.yaso91.alarmserver.service.component.ModbusPoint;
 import club.yaso91.client.util.YasoUtils;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,26 +49,27 @@ import java.util.HashMap;
 @Slf4j
 public class AlarmStateService {
     private final String SUM_INFO_DIR = "../sumInfos/";
-    private ModbusManger modbusManger = null;
+    @Autowired
     private AlarmInfoMapper alarmInfoMapper;
+    @Autowired
     private AlarmItemInfoMapper alarmItemInfoMapper;
+    @Autowired
     private EmailSender emailSender;
+    @Autowired
     private EmployeeInfoMapper employeeInfoMapper;
+    @Autowired
     private LocalDataService localDataService;
+    @Autowired
     private ModbusPointInfoMapper modbusPointInfoMapper;
 
-    @Autowired
-    public AlarmStateService(AlarmInfoMapper alarmInfoMapper,AlarmItemInfoMapper alarmItemInfoMapper,
-                             EmailSender emailSender,EmployeeInfoMapper employeeInfoMapper,
-                             LocalDataService localDataService,ModbusPointInfoMapper modbusPointInfoMapper) {
-        this.alarmInfoMapper = alarmInfoMapper;
-        this.alarmItemInfoMapper = alarmItemInfoMapper;
-        this.emailSender = emailSender;
-        this.employeeInfoMapper = employeeInfoMapper;
-        this.localDataService = localDataService;
-        this.modbusPointInfoMapper = modbusPointInfoMapper;
-        modbusManger = new ModbusManger();
+    private ModbusManger modbusManger = null;
 
+    public AlarmStateService() {
+        modbusManger = new ModbusManger();
+    }
+
+    @Scheduled(initialDelay = 10000)
+    public void boot() {
         // 读取数据库数据点信息.
         modbusManger.addPoints(this.modbusPointInfoMapper.selectAll());
 
