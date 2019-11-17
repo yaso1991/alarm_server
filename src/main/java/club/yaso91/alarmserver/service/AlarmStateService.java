@@ -68,18 +68,18 @@ public class AlarmStateService {
         modbusManger = new ModbusManger();
     }
 
-    @Scheduled(initialDelay = 10000)
-    public void boot() {
+    /**
+     * 初始化并启动modbus通信.
+     */
+    public void initAndStartModbusCommunication() {
         // 读取数据库数据点信息.
         modbusManger.addPoints(this.modbusPointInfoMapper.selectAll());
-
         modbusManger.startCommunication();
     }
 
     /**
-     * 定时从ModbusManager里读取报警信息.
+     * 更新报警信息.
      */
-    @Scheduled(initialDelay = 10000, fixedDelay = 1000)
     public void updateAlarmInfo() {
         // 获取串口
         ArrayList<ModbusCom> coms = modbusManger.getComs();
@@ -161,16 +161,13 @@ public class AlarmStateService {
                     alarmItemInfoMapper.update(alarmItemInfo);
                     continue;
                 }
-
-
             }
         }
     }
 
     /**
-     * 定时汇总推送
+     * 汇总推送
      */
-    @Scheduled(cron = "0/50 * * * * ?")
     public void checkAndPushSumInfo() {
         // 如果时间点和设置的时间点相吻合,推送汇总信息
         Calendar now = Calendar.getInstance();
@@ -235,7 +232,6 @@ public class AlarmStateService {
                 }
             }
         }
-
 
         // 发送本地报表到符合条件的emails.
         ArrayList<String> emails = employeeInfoMapper.selectEmails("经理");
