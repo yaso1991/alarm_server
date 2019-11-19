@@ -2,6 +2,7 @@ package club.yaso91.alarmserver.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Time;
 
 
@@ -14,7 +15,7 @@ import java.sql.Time;
  * @version: V1.0
 */
 @Data
-public class SystemConfig {
+public class SystemConfig implements Serializable  {
     private int id;
     /**
      * 班组长级推送延时.

@@ -11,6 +11,10 @@ import club.yaso91.alarmserver.domain.SystemConfig;
 import club.yaso91.alarmserver.mapper.SystemConfigMapper;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,29 +27,24 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @Data
+@CacheConfig(cacheNames = "c1")
 public class SystemConfigService {
-    private SystemConfigMapper systemConfigMapper;
-    // FIXME 这里 service要不要调用另外一个service?
-    private LocalDataService localDataService;
-
     @Autowired
-    public SystemConfigService(SystemConfigMapper systemConfigMapper, LocalDataService localDataService) {
-        this.systemConfigMapper = systemConfigMapper;
-        this.localDataService = localDataService;
-        this.localDataService.setLocalSystemConfig(this.systemConfigMapper.selectAll());
-    }
+    private SystemConfigMapper systemConfigMapper;
 
+    /**
+     * 加载系统配置
+     * @return
+     */
+    @Cacheable(key = "#root.methodName")
     public SystemConfig loadSystemConfig() {
         return systemConfigMapper.selectAll();
     }
 
+    @CachePut(key = "#systemConfig.id")
     public boolean updateSystemConfig(SystemConfig systemConfig) {
-        boolean result = false;
-        result = systemConfigMapper.update(systemConfig) == 1;
-        if (result) {
-            this.localDataService.setLocalSystemConfig(loadSystemConfig());
-        }
-        return result;
+        return systemConfigMapper.update(systemConfig) == 1;
+
 
     }
 }

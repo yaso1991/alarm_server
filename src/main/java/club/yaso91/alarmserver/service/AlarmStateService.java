@@ -57,8 +57,9 @@ public class AlarmStateService {
     private EmailSender emailSender;
     @Autowired
     private EmployeeInfoMapper employeeInfoMapper;
-    @Autowired
-    private LocalDataService localDataService;
+
+    private SystemConfigService systemConfigService;
+
     @Autowired
     private ModbusPointInfoMapper modbusPointInfoMapper;
 
@@ -114,7 +115,7 @@ public class AlarmStateService {
 
                     // 持续发生报警
                     boolean needPushing = false;
-                    SystemConfig systemConfig = localDataService.getLocalSystemConfig();
+                    SystemConfig systemConfig = systemConfigService.loadSystemConfig();
                     if (alarmInfo.getAlarmSpan() >= systemConfig.getMonitorPushDelay() && "未推送".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("班组长级");
                         needPushing = true;
@@ -171,7 +172,7 @@ public class AlarmStateService {
     public void checkAndPushSumInfo() {
         // 如果时间点和设置的时间点相吻合,推送汇总信息
         Calendar now = Calendar.getInstance();
-        SystemConfig localSystemConfig = localDataService.getLocalSystemConfig();
+        SystemConfig localSystemConfig = systemConfigService.loadSystemConfig();
         Calendar sumPushTime = Calendar.getInstance();
         sumPushTime.setTime(localSystemConfig.getSumPushTime());
         if (sumPushTime.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && sumPushTime.get(Calendar.MINUTE) == now.get(Calendar.MINUTE)) {

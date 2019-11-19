@@ -11,6 +11,7 @@ package club.yaso91.alarmserver;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 /**
  * @title: AlarmServerApplication
@@ -24,6 +25,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @MapperScan("club.yaso91.alarmserver.mapper")
 @SpringBootApplication
 @EnableScheduling
+@EnableCaching
 public class AlarmServerApplication {
 
     public static void main(String[] args) {
