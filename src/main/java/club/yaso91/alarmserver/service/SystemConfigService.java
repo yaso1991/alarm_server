@@ -44,7 +44,7 @@ public class SystemConfigService {
         return systemConfigMapper.selectAll();
     }
 
-    @CachePut(keyGenerator = "localSystemConfigKey")
+    @CachePut(keyGenerator = "localSystemConfigKey",condition = "#result != null")
     public SystemConfig updateSystemConfig(SystemConfig systemConfig) {
         if (systemConfigMapper.update(systemConfig) == 1) {
             return systemConfig;

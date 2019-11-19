@@ -36,12 +36,5 @@ public class SystemConfigServiceTest {
         SystemConfig systemConfig = systemConfigService.loadSystemConfig();
         systemConfig.setManagerPushDelay(5300);
         systemConfigService.updateSystemConfig(systemConfig);
-        SystemConfig systemConfig1 = (SystemConfig) redisTemplate.opsForValue().get("c1::localSystemConfig");
-        System.out.println(systemConfig1.getSumPushTime().toLocalTime());
-        systemConfig1.setId(9);
-        redisTemplate.opsForValue().getAndSet ("c1::localSystemConfig",systemConfig1);
-        SystemConfig systemConfig2 = (SystemConfig) redisTemplate.opsForValue().get("c1::localSystemConfig");
-        System.out.println(systemConfig2.getId());
-
     }
 }
