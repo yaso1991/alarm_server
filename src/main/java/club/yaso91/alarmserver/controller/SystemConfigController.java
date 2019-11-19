@@ -10,7 +10,10 @@ package club.yaso91.alarmserver.controller;
 import club.yaso91.alarmserver.domain.SystemConfig;
 import club.yaso91.alarmserver.service.SystemConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @version: V1.0
@@ -31,8 +34,8 @@ public class SystemConfigController {
         return systemConfigService.loadSystemConfig();
     }
 
-    @RequestMapping(value="/updateSystemConfig",method = RequestMethod.POST)
+    @RequestMapping(value = "/updateSystemConfig", method = RequestMethod.POST)
     public boolean updateSystemConfig(@RequestBody SystemConfig systemConfig) {
-        return  systemConfigService.updateSystemConfig(systemConfig);
+        return systemConfigService.updateSystemConfig(systemConfig) != null;
     }
 }

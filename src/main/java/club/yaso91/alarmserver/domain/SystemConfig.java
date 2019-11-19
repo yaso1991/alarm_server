@@ -15,7 +15,7 @@ import java.sql.Time;
  * @version: V1.0
 */
 @Data
-public class SystemConfig implements Serializable  {
+public class SystemConfig implements Serializable {
     private int id;
     /**
      * 班组长级推送延时.

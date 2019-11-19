@@ -8,6 +8,7 @@
 package club.yaso91.alarmserver.controller;
 
 import club.yaso91.alarmserver.service.AlarmStateService;
+import club.yaso91.alarmserver.service.SystemConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,9 @@ public class SystemController {
     @Autowired
     AlarmStateService alarmStateService;
 
+    @Autowired
+    SystemConfigService systemConfigService;
+
     @Scheduled(initialDelay = 10000,fixedDelay = 10000000)
     public void startModbus() {
         alarmStateService.initAndStartModbusCommunication();
@@ -38,5 +42,13 @@ public class SystemController {
     @Scheduled(cron = "0/50 * * * * ?")
     public void pushSumInfoOnSettingTime() {
         alarmStateService.checkAndPushSumInfo();
+    }
+
+    /**
+     * 启动时,读取一次系统设置到本地缓存.
+     */
+    @Scheduled(initialDelay = 5000,fixedDelay = 1000000000)
+    public void reloadSystemConfig() {
+        systemConfigService.loadSystemConfig();
     }
 }

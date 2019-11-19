@@ -9,19 +9,22 @@
 package club.yaso91.alarmserver.service;
 
 import club.yaso91.alarmserver.domain.SystemConfig;
+import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.junit.Assert.*;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class SystemConfigServiceTest {
     @Autowired
     SystemConfigService systemConfigService;
+    @Autowired
+    RedisTemplate redisTemplate;
+
     @Test
     public void loadSystemConfig() {
         System.out.println(systemConfigService.loadSystemConfig().toString());
@@ -31,7 +34,14 @@ public class SystemConfigServiceTest {
     @Test
     public void updateSystemConfig() {
         SystemConfig systemConfig = systemConfigService.loadSystemConfig();
-        systemConfig.setManagerPushDelay(1200);
+        systemConfig.setManagerPushDelay(5300);
         systemConfigService.updateSystemConfig(systemConfig);
+        SystemConfig systemConfig1 = (SystemConfig) redisTemplate.opsForValue().get("c1::localSystemConfig");
+        System.out.println(systemConfig1.getSumPushTime().toLocalTime());
+        systemConfig1.setId(9);
+        redisTemplate.opsForValue().getAndSet ("c1::localSystemConfig",systemConfig1);
+        SystemConfig systemConfig2 = (SystemConfig) redisTemplate.opsForValue().get("c1::localSystemConfig");
+        System.out.println(systemConfig2.getId());
+
     }
 }

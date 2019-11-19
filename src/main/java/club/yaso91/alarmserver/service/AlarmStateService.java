@@ -23,7 +23,6 @@ import club.yaso91.client.util.YasoUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -57,9 +56,8 @@ public class AlarmStateService {
     private EmailSender emailSender;
     @Autowired
     private EmployeeInfoMapper employeeInfoMapper;
-
+    @Autowired
     private SystemConfigService systemConfigService;
-
     @Autowired
     private ModbusPointInfoMapper modbusPointInfoMapper;
 

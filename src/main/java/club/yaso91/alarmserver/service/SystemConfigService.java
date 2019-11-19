@@ -7,6 +7,7 @@
  */
 package club.yaso91.alarmserver.service;
 
+import club.yaso91.alarmserver.cache.LocalSystemConfigKey;
 import club.yaso91.alarmserver.domain.SystemConfig;
 import club.yaso91.alarmserver.mapper.SystemConfigMapper;
 import lombok.Data;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,24 +27,29 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @Data
-@CacheConfig(cacheNames = "c1")
+@CacheConfig(cacheNames = "localData")
 public class SystemConfigService {
     @Autowired
     private SystemConfigMapper systemConfigMapper;
+    @Autowired
+    private LocalSystemConfigKey localSystemConfigKey;
 
     /**
      * 加载系统配置
+     *
      * @return
      */
-    @Cacheable(key = "#root.methodName")
+    @Cacheable(keyGenerator = "localSystemConfigKey")
     public SystemConfig loadSystemConfig() {
         return systemConfigMapper.selectAll();
     }
 
-    @CachePut(key = "#systemConfig.id")
-    public boolean updateSystemConfig(SystemConfig systemConfig) {
-        return systemConfigMapper.update(systemConfig) == 1;
-
-
+    @CachePut(keyGenerator = "localSystemConfigKey")
+    public SystemConfig updateSystemConfig(SystemConfig systemConfig) {
+        if (systemConfigMapper.update(systemConfig) == 1) {
+            return systemConfig;
+        }
+        return null;
     }
+
 }
