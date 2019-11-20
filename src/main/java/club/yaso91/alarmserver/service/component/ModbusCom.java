@@ -105,7 +105,7 @@ public class ModbusCom {
     /**
      * 通过串口的modbus协议采集数据.
      */
-    public void comminucateWithModbus() {
+    public void comminucateWithModbus(){
         // 如果未连接,重新连接.
         if (!connected) {
             log.info(this.portName + " reconnecting...");

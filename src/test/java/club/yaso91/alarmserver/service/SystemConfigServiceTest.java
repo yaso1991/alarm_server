@@ -33,7 +33,10 @@ public class SystemConfigServiceTest {
 
     @Test
     public void updateSystemConfig() {
-        SystemConfig systemConfig = systemConfigService.loadSystemConfig();
+//        SystemConfig systemConfig = systemConfigService.loadSystemConfig();
+        SystemConfig systemConfig = new SystemConfig();
+        systemConfig.setId(9);
+        systemConfig.setMasterPushDelay(200);
         systemConfig.setManagerPushDelay(5300);
         systemConfigService.updateSystemConfig(systemConfig);
     }
