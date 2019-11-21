@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
  * @data: 2019-10-19 18:49
  **/
 @Data
-@Slf4j
 public class ModbusManger {
     private ArrayList<ModbusCom> coms = new ArrayList<>();
     private ThreadPoolExecutor threadPoolExecutor;
@@ -57,17 +56,10 @@ public class ModbusManger {
         threadPoolExecutor = new ThreadPoolExecutor(size, size + 10, 60L, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(10), new ThreadFactoryBuilder().setNameFormat("modbus-%d").build());
         for (ModbusCom com : coms) {
-            threadPoolExecutor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    while (true) {
-                        com.comminucateWithModbus();
-                        try {
-                            Thread.sleep(com.getMillis());
-                        } catch (InterruptedException e) {
-                            log.warn(e.toString());
-                        }
-                    }
+            threadPoolExecutor.submit(() -> {
+                while (true) {
+                    com.comminucateWithModbus();
+                    Thread.sleep(com.getMillis());
                 }
             });
         }

@@ -1,6 +1,5 @@
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertEquals;
+import java.io.IOException;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class AlarmStateServiceTest {
@@ -26,9 +26,8 @@ public class AlarmStateServiceTest {
     }
 
 
-
     @Test
-    public void checkAndPushSumInfo() {
+    public void checkAndPushSumInfo() throws IOException {
         alarmStateService.checkAndPushSumInfo();
     }
 

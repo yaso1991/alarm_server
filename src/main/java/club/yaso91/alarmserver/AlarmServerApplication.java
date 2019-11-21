@@ -27,7 +27,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableCaching
 public class AlarmServerApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(AlarmServerApplication.class, args);
     }

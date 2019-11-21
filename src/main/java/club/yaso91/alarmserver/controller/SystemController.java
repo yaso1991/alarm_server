@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
+
 /**
  * @version: V1.0
  * @author: Yaso
@@ -29,7 +31,7 @@ public class SystemController {
     @Autowired
     SystemConfigService systemConfigService;
 
-    @Scheduled(initialDelay = 10000,fixedDelay = 10000000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 10000000)
     public void startModbus() {
         alarmStateService.initAndStartModbusCommunication();
     }
@@ -37,17 +39,18 @@ public class SystemController {
     @Scheduled(initialDelay = 10000, fixedDelay = 1000)
     public void updateAlarmInfoOnCycle() {
         alarmStateService.updateAlarmInfo();
+
     }
 
     @Scheduled(cron = "0/50 * * * * ?")
-    public void pushSumInfoOnSettingTime() {
+    public void pushSumInfoOnSettingTime() throws IOException {
         alarmStateService.checkAndPushSumInfo();
     }
 
     /**
      * 启动时,读取一次系统设置到本地缓存.
      */
-    @Scheduled(initialDelay = 5000,fixedDelay = 1000000000)
+    @Scheduled(initialDelay = 5000, fixedDelay = 1000000000)
     public void reloadSystemConfig() {
         systemConfigService.loadSystemConfig();
     }

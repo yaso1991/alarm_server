@@ -77,20 +77,16 @@ public class ModbusCom {
 
     /**
      * 初始化并打开串口.
+     * @return
      */
-    private void initAndOpenCom() {
+    private boolean initAndOpenCom() throws IOException {
         if (connected) {
-            return;
+            return false;
         }
         com = new SerialConnection(params);
-        try {
-            com.open();
-            log.info(this.portName + " open success.");
-            connected = true;
-        } catch (IOException e) {
-            log.warn(e.toString());
-            connected = false;
-        }
+        com.open();
+        connected = true;
+        return true;
     }
 
     /**
@@ -105,7 +101,7 @@ public class ModbusCom {
     /**
      * 通过串口的modbus协议采集数据.
      */
-    public void comminucateWithModbus(){
+    public void comminucateWithModbus() throws IOException, ModbusException {
         // 如果未连接,重新连接.
         if (!connected) {
             log.info(this.portName + " reconnecting...");
@@ -113,49 +109,46 @@ public class ModbusCom {
             return;
         }
 
-        // 读取数据
-        try {
-            for (String key : points.keySet()) {
-                ModbusPoint point = points.get(key);
-                ModbusRequest req = null;
-                int code = point.getCode();
-                int ref = point.getRef();
-                int count = point.getCount();
-                if (2 == code) {
-                    req = new ReadInputDiscretesRequest(ref, count);
-                } else if (3 == code) {
-                    req = new ReadMultipleRegistersRequest(ref, count);
-                } else {
 
-                }
+        for (String key : points.keySet()) {
+            ModbusPoint point = points.get(key);
+            ModbusRequest req = null;
+            int code = point.getCode();
+            int ref = point.getRef();
+            int count = point.getCount();
+            if (2 == code) {
+                req = new ReadInputDiscretesRequest(ref, count);
+            } else if (3 == code) {
+                req = new ReadMultipleRegistersRequest(ref, count);
+            } else {
 
-                int deviceId = point.getDeviceId();
-                req.setUnitID(deviceId);
-                req.setUnitID(deviceId);
-                req.setHeadless();
-
-                ModbusSerialTransaction trans = new ModbusSerialTransaction(com);
-                trans.setRequest(req);
-                trans.execute();
-
-                if (2 == code) {
-                    ReadInputDiscretesResponse res = (ReadInputDiscretesResponse) trans.getResponse();
-                    point.updateCurrentValue(String.valueOf(res.getDiscreteStatus(0)));
-                } else if (3 == code) {
-                    ReadMultipleRegistersResponse res = (ReadMultipleRegistersResponse) trans.getResponse();
-
-                    byte[] message = res.getMessage();
-                    byte[] data = new byte[BYTE_COUNT_OF_A_DOUBLE_WORD];
-                    for (int i = 0; i < BYTE_COUNT_OF_A_DOUBLE_WORD; i++) {
-                        data[i] = message[i + 1];
-                    }
-                    point.updateCurrentValue(String.valueOf(ModbusUtil.registersToFloat(data)));
-                } else {
-
-                }
             }
-        } catch (ModbusException e) {
-            log.warn(e.toString());
+
+            int deviceId = point.getDeviceId();
+            req.setUnitID(deviceId);
+            req.setUnitID(deviceId);
+            req.setHeadless();
+
+            ModbusSerialTransaction trans = new ModbusSerialTransaction(com);
+            trans.setRequest(req);
+            trans.execute();
+
+            if (2 == code) {
+                ReadInputDiscretesResponse res = (ReadInputDiscretesResponse) trans.getResponse();
+                point.updateCurrentValue(String.valueOf(res.getDiscreteStatus(0)));
+            } else if (3 == code) {
+                ReadMultipleRegistersResponse res = (ReadMultipleRegistersResponse) trans.getResponse();
+
+                byte[] message = res.getMessage();
+                byte[] data = new byte[BYTE_COUNT_OF_A_DOUBLE_WORD];
+                for (int i = 0; i < BYTE_COUNT_OF_A_DOUBLE_WORD; i++) {
+                    data[i] = message[i + 1];
+                }
+                point.updateCurrentValue(String.valueOf(ModbusUtil.registersToFloat(data)));
+            } else {
+
+            }
         }
+
     }
 }

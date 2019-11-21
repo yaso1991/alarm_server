@@ -7,9 +7,9 @@
  */
 package club.yaso91.alarmserver.service;
 
-import club.yaso91.alarmserver.service.common.AlarmItemInfoExcelHandler;
 import club.yaso91.alarmserver.domain.AlarmItemInfo;
 import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
+import club.yaso91.alarmserver.service.common.AlarmItemInfoExcelHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +29,12 @@ import java.util.ArrayList;
  * @data: 2019-10-07 15:47
  **/
 @Service
-@Slf4j
 public class SumInfoService {
     @Autowired
     AlarmItemInfoMapper alarmItemInfoMapper;
 
-    public ArrayList<AlarmItemInfo> getSumInfos(Timestamp beginTime, Timestamp endTime, String alarmName,
+    public ArrayList<AlarmItemInfo> getSumInfos(Timestamp beginTime, Timestamp endTime,
+                                                String alarmName,
                                                 String employeeName) {
         return alarmItemInfoMapper.selectSumInfos(beginTime, endTime, alarmName, employeeName);
     }
@@ -49,16 +49,12 @@ public class SumInfoService {
      *
      * @return
      */
-    public ByteArrayOutputStream exportSumInfos() {
+    public ByteArrayOutputStream exportSumInfos() throws IOException {
         ArrayList<AlarmItemInfo> allSumInfos = this.getAllSumInfos();
         HSSFWorkbook workbook = new HSSFWorkbook();
         AlarmItemInfoExcelHandler.generatorExcelBook(allSumInfos, workbook);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            workbook.write(outputStream);
-        } catch (IOException e) {
-            log.warn(e.toString());
-        }
+        workbook.write(outputStream);
         return outputStream;
     }
 }

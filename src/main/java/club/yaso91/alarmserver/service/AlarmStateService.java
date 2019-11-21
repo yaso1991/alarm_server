@@ -20,13 +20,11 @@ import club.yaso91.alarmserver.service.component.ModbusCom;
 import club.yaso91.alarmserver.service.component.ModbusManger;
 import club.yaso91.alarmserver.service.component.ModbusPoint;
 import club.yaso91.client.util.YasoUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -45,7 +43,6 @@ import java.util.HashMap;
  * @data: 2019-10-22 19:21
  **/
 @Service
-@Slf4j
 public class AlarmStateService {
     private final String SUM_INFO_DIR = "../sumInfos/";
     @Autowired
@@ -117,18 +114,22 @@ public class AlarmStateService {
                     if (alarmInfo.getAlarmSpan() >= systemConfig.getMonitorPushDelay() && "未推送".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("班组长级");
                         needPushing = true;
-                    } else if (alarmInfo.getAlarmSpan() >= systemConfig.getMasterPushDelay() && "班组长级".equals(alarmInfo.getPushLevel())) {
+                    } else if (alarmInfo.getAlarmSpan() >= systemConfig.getMasterPushDelay() &&
+                            "班组长级".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("主任级");
                         needPushing = true;
 
-                    } else if (alarmInfo.getAlarmSpan() >= systemConfig.getManagerPushDelay() && "主任级".equals(alarmInfo.getPushLevel())) {
+                    } else if (alarmInfo.getAlarmSpan() >= systemConfig.getManagerPushDelay() &&
+                            "主任级".equals(alarmInfo.getPushLevel())) {
                         alarmInfo.setPushLevel("经理级");
                         needPushing = true;
                     }
 
                     // 需要推送
                     if (needPushing) {
-                        ArrayList<String> emails = employeeInfoMapper.selectEmails(alarmInfo.getPushLevel().replace("级",
+                        ArrayList<String> emails =
+                                employeeInfoMapper.selectEmails(alarmInfo.getPushLevel().replace(
+                                        "级",
                                 ""));
                         if (!emails.isEmpty()) {
                             String from = "1441825297@qq.com";
@@ -143,7 +144,8 @@ public class AlarmStateService {
                                             + alarmInfo.getPushLevel() + " 报警推送,"
                                             + "报警发生时间:" + alarmInfo.getAlarmTime()
                                             + ",报警时长超过 " + alarmInfo.getAlarmSpan() + " 秒未有人处理,"
-                                            + "当班员工:" + alarmInfo.getEmployee().getName() + ",工号:" + alarmInfo.getEmployee().getWorkId();
+                                            + "当班员工:" + alarmInfo.getEmployee().getName() + "," +
+                                            "工号:" + alarmInfo.getEmployee().getWorkId();
                             if (emails.size() > 1) {
                                 emails.remove(0);
                                 emailSender.sendAlarmMail(from, to, subject, context,
@@ -167,23 +169,23 @@ public class AlarmStateService {
     /**
      * 汇总推送
      */
-    public void checkAndPushSumInfo() {
+    public void checkAndPushSumInfo() throws IOException {
         // 如果时间点和设置的时间点相吻合,推送汇总信息
         SystemConfig localSystemConfig = systemConfigService.loadSystemConfig();
-//        if (localSystemConfig.getSumPushTime() != null) {
+        if (localSystemConfig.getSumPushTime() != null) {
             Calendar now = Calendar.getInstance();
             Calendar sumPushTime = Calendar.getInstance();
             sumPushTime.setTime(localSystemConfig.getSumPushTime());
             if (sumPushTime.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && sumPushTime.get(Calendar.MINUTE) == now.get(Calendar.MINUTE)) {
                 pushSumInfo();
             }
-//        }
+        }
     }
 
     /**
      * 推送汇总信息逻辑.
      */
-    private void pushSumInfo() {
+    private void pushSumInfo() throws IOException {
         // 查询昨日报警记录
         long yestodayMills = YasoUtils.getYestodayMills() * 1000;
         Timestamp beginTime = new Timestamp(yestodayMills);
@@ -197,42 +199,22 @@ public class AlarmStateService {
         AlarmItemInfoExcelHandler.generatorExcelBook(alarmItemInfos, workbook);
 
         // EXCEL报表保存到本地
-        String fileName =
-                "/报警汇总" + new SimpleDateFormat("yyyy_MM_dd").format(new Date(yestodayMills)) +
-                        ".xls";
-        File file = null;
         File fileDir = new File(SUM_INFO_DIR);
         if (!fileDir.exists()) {
             fileDir.mkdir();
         }
-        file = new File(fileDir, fileName);
+        String fileName =
+                "/报警汇总" + new SimpleDateFormat("yyyy_MM_dd").format(new Date(yestodayMills)) +
+                        ".xls";
+        File file = new File(fileDir, fileName);
         if (file.exists()) {
             file.delete();
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                log.warn(e.toString());
-            }
+            file.createNewFile();
         }
-        FileOutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(file);
-            workbook.write(outputStream);
-        } catch (FileNotFoundException e) {
-            log.warn(e.toString());
-        } catch (IOException e) {
-            log.warn(e.toString());
-        } finally {
-            //关闭流.
-            if (null != outputStream) {
-                try {
-                    outputStream.flush();
-                    outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        FileOutputStream outputStream = new FileOutputStream(file);
+        workbook.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
 
         // 发送本地报表到符合条件的emails.
         ArrayList<String> emails = employeeInfoMapper.selectEmails("经理");
@@ -240,19 +222,19 @@ public class AlarmStateService {
             return;
         }
         if (emails.size() == 1) {
-            emailSender.sendSumInfoMail(file, "1441825297@qq.com", emails.get(0), fileName.replace(".xls",
+            emailSender.sendSumInfoMail(file, "1441825297@qq.com", emails.get(0),
+                    fileName.replace(".xls",
                     ""),
                     beginTime.toString() + "报警汇总,详见电子邮件的附件.");
             return;
         }
-        if (emails.size() > 1) {
-            String to = emails.get(0);
-            emails.remove(0);
-            emailSender.sendSumInfoMail(file, "1441825297@qq.com", to,
-                    beginTime.toString() + "报警汇总",
-                    beginTime.toString() + "报警汇总,详见电子邮件的附件.",
-                    emails.toArray(new String[emails.size()]));
-        }
+
+        String to = emails.get(0);
+        emails.remove(0);
+        emailSender.sendSumInfoMail(file, "1441825297@qq.com", to,
+                beginTime.toString() + "报警汇总",
+                beginTime.toString() + "报警汇总,详见电子邮件的附件.",
+                emails.toArray(new String[emails.size()]));
     }
 
     /**

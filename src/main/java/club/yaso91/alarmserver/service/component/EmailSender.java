@@ -46,17 +46,14 @@ public class EmailSender {
      * @param cc      抄送
      */
     public void sendAlarmMail(String from, String to, String subject, String context, String... cc) {
-        threadPoolExecutor.submit(new Runnable() {
-            @Override
-            public void run() {
-                SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-                simpleMailMessage.setFrom(from);
-                simpleMailMessage.setTo(to);
-                simpleMailMessage.setCc(cc);
-                simpleMailMessage.setSubject(subject);
-                simpleMailMessage.setText(context);
-                mailSender.send(simpleMailMessage);
-            }
+        threadPoolExecutor.submit(() -> {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(from);
+            simpleMailMessage.setTo(to);
+            simpleMailMessage.setCc(cc);
+            simpleMailMessage.setSubject(subject);
+            simpleMailMessage.setText(context);
+            mailSender.send(simpleMailMessage);
         });
     }
 
@@ -72,22 +69,19 @@ public class EmailSender {
      */
     public void sendSumInfoMail(File file, String from, String to, String subject, String context,
                                 String... cc) {
-        threadPoolExecutor.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    MimeMessage message = mailSender.createMimeMessage();
-                    MimeMessageHelper helper = new MimeMessageHelper(message, true);
-                    helper.setFrom(from);
-                    helper.setTo(to);
-                    helper.setCc(cc);
-                    helper.setSubject(subject);
-                    helper.setText(context);
-                    helper.addAttachment(file.getName(), file);
-                    mailSender.send(message);
-                } catch (MessagingException e) {
-                    e.printStackTrace();
-                }
+        threadPoolExecutor.submit(() -> {
+            try {
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true);
+                helper.setFrom(from);
+                helper.setTo(to);
+                helper.setCc(cc);
+                helper.setSubject(subject);
+                helper.setText(context);
+                helper.addAttachment(file.getName(), file);
+                mailSender.send(message);
+            } catch (MessagingException e) {
+                e.printStackTrace();
             }
         });
     }
