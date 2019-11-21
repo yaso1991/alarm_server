@@ -16,7 +16,34 @@ package club.yaso91.statictest;
  * @data: 2019-11-18 10:53
  **/
 public class RedisTest {
-    public static void main() {
+    public static void main(String[] args) {
+        int result;
 
+        result = foo();
+        System.out.println(result);     /////////2
+
+        result = bar();
+        System.out.println(result);    /////////2
+    }
+
+    @SuppressWarnings("finally")
+    public static int foo() {
+        try {
+            int a = 5 / 0;
+        } catch (Exception e) {
+            return 1;
+        } finally {
+            return 2;
+        }
+
+    }
+
+    @SuppressWarnings("finally")
+    public static int bar() {
+        try {
+            return 1;
+        } finally {
+            return 2;
+        }
     }
 }
