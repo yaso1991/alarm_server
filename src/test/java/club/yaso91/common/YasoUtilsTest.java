@@ -1,15 +1,20 @@
-package club.yaso91.client.util;
+/*
+ * Copyright(c)2002-2019, 雅俗工作室.
+ *    项目名称:alarm_server
+ *    文件名称:YasoUtilsTest.java
+ *    Date:2019/11/22 下午1:46
+ *    Author:Yaso
+ */
 
+package club.yaso91.common;
+
+import club.yaso91.alarmserver.common.util.YasoUtils;
 import org.junit.Test;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-
-import static org.junit.Assert.*;
 
 public class YasoUtilsTest {
 

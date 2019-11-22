@@ -1,11 +1,11 @@
-/**
- * projectName: alarmserver
- * fileName: YasoUtils.java
- * packageName: club.yaso91.alarmserver.service.common
- * date: 2019-10-16 20:37
- * copyright(c) 2017-2020 FuYun design studio.
+/*
+ * Copyright(c)2002-2019, 雅俗工作室.
+ *    项目名称:alarm_server
+ *    文件名称:YasoUtils.java
+ *    Date:2019/11/22 下午3:33
+ *    Author:Yaso
  */
-package club.yaso91.client.util;
+package club.yaso91.alarmserver.common.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -13,13 +13,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 /**
- * @version: V1.0
+ * Yaso的工具类
  * @author: Yaso
- * @className: YasoUtils
- * @packageName: club.yaso91.alarmserver.service.common
- * @description: Yaso的工具类.
- * @data: 2019-10-16 20:37
- **/
+ * @date: 2019-11-22 14:53
+ */
+
 public class YasoUtils {
     /**
      * 生成密码的BCrypt编码.
@@ -40,7 +38,8 @@ public class YasoUtils {
     public static long getYestodayMills() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime yestoday =
-                LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 0, 0, 0).minusHours(24);
+                LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 0, 0,
+                        0).minusHours(24);
         return yestoday.toEpochSecond(ZoneOffset.ofHours(8));
     }
 }

@@ -19,7 +19,7 @@ import club.yaso91.alarmserver.service.component.EmailSender;
 import club.yaso91.alarmserver.service.component.ModbusCom;
 import club.yaso91.alarmserver.service.component.ModbusManger;
 import club.yaso91.alarmserver.service.component.ModbusPoint;
-import club.yaso91.client.util.YasoUtils;
+import club.yaso91.alarmserver.common.util.YasoUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

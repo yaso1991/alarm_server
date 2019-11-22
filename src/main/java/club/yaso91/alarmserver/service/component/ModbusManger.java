@@ -10,7 +10,6 @@ package club.yaso91.alarmserver.service.component;
 import club.yaso91.alarmserver.domain.ModbusPointInfo;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -41,8 +40,10 @@ public class ModbusManger {
             if (!coms.contains(newCom)) {
                 this.coms.add(newCom);
             }
-            ModbusPoint point = new ModbusPoint(modbusPointInfo.getName(), modbusPointInfo.getDeviceId(),
-                    modbusPointInfo.getCode(), modbusPointInfo.getRef(), modbusPointInfo.getCount());
+            ModbusPoint point = new ModbusPoint(modbusPointInfo.getName(),
+                    modbusPointInfo.getDeviceId(),
+                    modbusPointInfo.getCode(), modbusPointInfo.getRef(),
+                    modbusPointInfo.getCount());
             coms.get(coms.indexOf(newCom)).addPoint(point);
         }
     }
@@ -54,7 +55,8 @@ public class ModbusManger {
         // 根据串口数量初始化线程池.固定size个线程.
         int size = coms.size();
         threadPoolExecutor = new ThreadPoolExecutor(size, size + 10, 60L, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<>(10), new ThreadFactoryBuilder().setNameFormat("modbus-%d").build());
+                new ArrayBlockingQueue<>(10), new ThreadFactoryBuilder().setNameFormat("modbus-%d"
+        ).build());
         for (ModbusCom com : coms) {
             threadPoolExecutor.submit(() -> {
                 while (true) {
