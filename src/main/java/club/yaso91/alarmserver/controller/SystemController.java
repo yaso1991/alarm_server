@@ -42,7 +42,7 @@ public class SystemController {
 
     }
 
-    @Scheduled(cron = "0/50 * * * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void pushSumInfoOnSettingTime() throws IOException {
         alarmStateService.checkAndPushSumInfo();
     }

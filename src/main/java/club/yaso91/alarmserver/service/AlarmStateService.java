@@ -15,7 +15,7 @@ import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
 import club.yaso91.alarmserver.mapper.EmployeeInfoMapper;
 import club.yaso91.alarmserver.mapper.ModbusPointInfoMapper;
 import club.yaso91.alarmserver.service.common.AlarmItemInfoExcelHandler;
-import club.yaso91.alarmserver.service.component.EmailSender;
+import club.yaso91.alarmserver.common.util.EmailSender;
 import club.yaso91.alarmserver.service.component.ModbusCom;
 import club.yaso91.alarmserver.service.component.ModbusManger;
 import club.yaso91.alarmserver.service.component.ModbusPoint;
@@ -50,13 +50,13 @@ public class AlarmStateService {
     @Autowired
     private AlarmItemInfoMapper alarmItemInfoMapper;
     @Autowired
-    private EmailSender emailSender;
-    @Autowired
     private EmployeeInfoMapper employeeInfoMapper;
     @Autowired
     private SystemConfigService systemConfigService;
     @Autowired
     private ModbusPointInfoMapper modbusPointInfoMapper;
+    @Autowired
+    private EmailSender emailSender;
 
     private ModbusManger modbusManger = null;
 
@@ -148,10 +148,10 @@ public class AlarmStateService {
                                             "工号:" + alarmInfo.getEmployee().getWorkId();
                             if (emails.size() > 1) {
                                 emails.remove(0);
-                                emailSender.sendAlarmMail(from, to, subject, context,
+                                 emailSender.sendMail(from, to, subject, context,
                                         emails.toArray(new String[emails.size()]));
                             } else {
-                                emailSender.sendAlarmMail(from, to, subject, context);
+                                emailSender.sendMail(from, to, subject, context);
                             }
                         }
                     }
@@ -170,6 +170,7 @@ public class AlarmStateService {
      * 汇总推送
      */
     public void checkAndPushSumInfo() throws IOException {
+
         // 如果时间点和设置的时间点相吻合,推送汇总信息
         SystemConfig localSystemConfig = systemConfigService.loadSystemConfig();
         if (localSystemConfig.getSumPushTime() != null) {
@@ -222,7 +223,7 @@ public class AlarmStateService {
             return;
         }
         if (emails.size() == 1) {
-            emailSender.sendSumInfoMail(file, "1441825297@qq.com", emails.get(0),
+            emailSender.sendMail(file, "1441825297@qq.com", emails.get(0),
                     fileName.replace(".xls",
                     ""),
                     beginTime.toString() + "报警汇总,详见电子邮件的附件.");
@@ -231,7 +232,7 @@ public class AlarmStateService {
 
         String to = emails.get(0);
         emails.remove(0);
-        emailSender.sendSumInfoMail(file, "1441825297@qq.com", to,
+        emailSender.sendMail(file, "1441825297@qq.com", to,
                 beginTime.toString() + "报警汇总",
                 beginTime.toString() + "报警汇总,详见电子邮件的附件.",
                 emails.toArray(new String[emails.size()]));
