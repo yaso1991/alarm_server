@@ -10,6 +10,7 @@ package club.yaso91.alarmserver.service.component;
 import club.yaso91.alarmserver.domain.ModbusPointInfo;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -17,14 +18,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @version: V1.0
+ * 串口管理类.
  * @author: Yaso
- * @className: ModbusManger
- * @packageName: club.yaso91.alarmserver.service.component
- * @description: 串口管理
- * @data: 2019-10-19 18:49
- **/
+ * @date: 2019-11-22 20:30
+ */
 @Data
+@Component
 public class ModbusManger {
     private ArrayList<ModbusCom> coms = new ArrayList<>();
     private ThreadPoolExecutor threadPoolExecutor;

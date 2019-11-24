@@ -7,6 +7,8 @@
  */
 package club.yaso91.alarmserver.service;
 
+import club.yaso91.alarmserver.common.util.EmailSender;
+import club.yaso91.alarmserver.common.util.YasoUtils;
 import club.yaso91.alarmserver.domain.AlarmInfo;
 import club.yaso91.alarmserver.domain.AlarmItemInfo;
 import club.yaso91.alarmserver.domain.SystemConfig;
@@ -15,11 +17,10 @@ import club.yaso91.alarmserver.mapper.AlarmItemInfoMapper;
 import club.yaso91.alarmserver.mapper.EmployeeInfoMapper;
 import club.yaso91.alarmserver.mapper.ModbusPointInfoMapper;
 import club.yaso91.alarmserver.service.common.AlarmItemInfoExcelHandler;
-import club.yaso91.alarmserver.common.util.EmailSender;
 import club.yaso91.alarmserver.service.component.ModbusCom;
 import club.yaso91.alarmserver.service.component.ModbusManger;
 import club.yaso91.alarmserver.service.component.ModbusPoint;
-import club.yaso91.alarmserver.common.util.YasoUtils;
+import lombok.Getter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,12 +58,9 @@ public class AlarmStateService {
     private ModbusPointInfoMapper modbusPointInfoMapper;
     @Autowired
     private EmailSender emailSender;
-
-    private ModbusManger modbusManger = null;
-
-    public AlarmStateService() {
-        modbusManger = new ModbusManger();
-    }
+    @Autowired
+    @Getter
+    private ModbusManger modbusManger;
 
     /**
      * 初始化并启动modbus通信.
@@ -80,7 +78,7 @@ public class AlarmStateService {
         // 获取串口
         ArrayList<ModbusCom> coms = modbusManger.getComs();
         for (ModbusCom com : coms) {
-            if (!com.isConnected()) {
+            if (com != null || !com.getCom().isOpen()) {
                 continue;
             }
 
@@ -125,12 +123,13 @@ public class AlarmStateService {
                         needPushing = true;
                     }
 
+
                     // 需要推送
                     if (needPushing) {
                         ArrayList<String> emails =
                                 employeeInfoMapper.selectEmails(alarmInfo.getPushLevel().replace(
                                         "级",
-                                ""));
+                                        ""));
                         if (!emails.isEmpty()) {
                             String from = "1441825297@qq.com";
                             String to = emails.get(0);
@@ -148,7 +147,7 @@ public class AlarmStateService {
                                             "工号:" + alarmInfo.getEmployee().getWorkId();
                             if (emails.size() > 1) {
                                 emails.remove(0);
-                                 emailSender.sendMail(from, to, subject, context,
+                                emailSender.sendMail(from, to, subject, context,
                                         emails.toArray(new String[emails.size()]));
                             } else {
                                 emailSender.sendMail(from, to, subject, context);
@@ -225,7 +224,7 @@ public class AlarmStateService {
         if (emails.size() == 1) {
             emailSender.sendMail(file, "1441825297@qq.com", emails.get(0),
                     fileName.replace(".xls",
-                    ""),
+                            ""),
                     beginTime.toString() + "报警汇总,详见电子邮件的附件.");
             return;
         }

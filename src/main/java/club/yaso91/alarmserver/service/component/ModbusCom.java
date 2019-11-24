@@ -17,7 +17,6 @@ import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 import com.google.common.base.Objects;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,20 +30,33 @@ import java.util.HashMap;
  * @data: 2019-10-19 15:53
  **/
 @Data
-@Slf4j
 public class ModbusCom {
+    /**
+     * 通信状态
+     */
+    public static final String COMM_STATE_SUCCESS = "通信正常";
+    public static final String COMM_STATE_FAILURE = "通信失败";
+    public static final String COMM_STATE_CLOSE = "通信关闭";
+    public static final String COMM_STATE_OPEN = "通信打开";
+
+    /**
+     * 串口参数
+     */
     private static final String SERIAL_ENCODING_RTU = Modbus.SERIAL_ENCODING_RTU;
     private static final int STOP_BITS = 1;
     private static final String PARITY = "None";
     private static final int DATABITS = 8;
     private static final int RATE = 9600;
     private static final int BYTE_COUNT_OF_A_DOUBLE_WORD = 4;
+    private static final int TIMEOUT = 500;
     private final SerialParameters params = new SerialParameters();
+    private static final int COMM_FAILURE_COUNT_OF_REBOOT = 10;
+    private int commFailTimes = 0;
     private AbstractSerialConnection com;
     private int millis = 500;
     private String portName;
     private HashMap<String, ModbusPoint> points = new HashMap<>();
-    private boolean connected = false;
+    private String comState = COMM_STATE_CLOSE;
 
     public ModbusCom(String portName) {
         this.portName = portName;
@@ -77,16 +89,18 @@ public class ModbusCom {
 
     /**
      * 初始化并打开串口.
+     *
      * @return
      */
-    private boolean initAndOpenCom() throws IOException {
-        if (connected) {
-            return false;
+    private void initAndOpenCom() throws IOException {
+        if (com != null) {
+            com.close();
+            com = null;
         }
         com = new SerialConnection(params);
+        com.setTimeout(TIMEOUT);
         com.open();
-        connected = true;
-        return true;
+        comState = COMM_STATE_OPEN;
     }
 
     /**
@@ -101,10 +115,9 @@ public class ModbusCom {
     /**
      * 通过串口的modbus协议采集数据.
      */
-    public void comminucateWithModbus() throws IOException, ModbusException {
+    public void comminucateWithModbus() throws IOException {
         // 如果未连接,重新连接.
-        if (!connected) {
-            log.info(this.portName + " reconnecting...");
+        if (com == null || !com.isOpen()) {
             initAndOpenCom();
             return;
         }
@@ -131,24 +144,40 @@ public class ModbusCom {
 
             ModbusSerialTransaction trans = new ModbusSerialTransaction(com);
             trans.setRequest(req);
-            trans.execute();
+            try {
+                trans.execute();
+                if (2 == code) {
+                    ReadInputDiscretesResponse res =
+                            (ReadInputDiscretesResponse) trans.getResponse();
+                    point.updateCurrentValue(String.valueOf(res.getDiscreteStatus(0)));
+                } else if (3 == code) {
+                    ReadMultipleRegistersResponse res =
+                            (ReadMultipleRegistersResponse) trans.getResponse();
 
-            if (2 == code) {
-                ReadInputDiscretesResponse res = (ReadInputDiscretesResponse) trans.getResponse();
-                point.updateCurrentValue(String.valueOf(res.getDiscreteStatus(0)));
-            } else if (3 == code) {
-                ReadMultipleRegistersResponse res = (ReadMultipleRegistersResponse) trans.getResponse();
+                    byte[] message = res.getMessage();
+                    byte[] data = new byte[BYTE_COUNT_OF_A_DOUBLE_WORD];
+                    for (int i = 0; i < BYTE_COUNT_OF_A_DOUBLE_WORD; i++) {
+                        data[i] = message[i + 1];
+                    }
+                    point.updateCurrentValue(String.valueOf(ModbusUtil.registersToFloat(data)));
+                } else {
 
-                byte[] message = res.getMessage();
-                byte[] data = new byte[BYTE_COUNT_OF_A_DOUBLE_WORD];
-                for (int i = 0; i < BYTE_COUNT_OF_A_DOUBLE_WORD; i++) {
-                    data[i] = message[i + 1];
                 }
-                point.updateCurrentValue(String.valueOf(ModbusUtil.registersToFloat(data)));
-            } else {
+                comState = COMM_STATE_SUCCESS;
+            } catch (ModbusException e) {
+                comState = COMM_STATE_FAILURE;
 
+                // 连续读取失败到达预订次数,重启串口
+                commFailTimes++;
+                if(commFailTimes > COMM_FAILURE_COUNT_OF_REBOOT) {
+                    com.close();
+                    com = null;
+                    commFailTimes = 0;
+                    comState = COMM_STATE_CLOSE;
+                }
             }
         }
 
     }
+
 }
