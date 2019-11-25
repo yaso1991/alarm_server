@@ -2,7 +2,7 @@
  * Copyright(c)2002-2019, 雅俗工作室.
  *    项目名称:alarm_server
  *    文件名称:AlarmStateService.java
- *    Date:2019/11/17 上午11:13
+ *    Date:2019/11/25 下午1:39
  *    Author:Yaso
  */
 package club.yaso91.alarmserver.service;
@@ -78,7 +78,7 @@ public class AlarmStateService {
         // 获取串口
         ArrayList<ModbusCom> coms = modbusManger.getComs();
         for (ModbusCom com : coms) {
-            if (com != null || !com.getCom().isOpen()) {
+            if (com == null || !com.getCom().isOpen()) {
                 continue;
             }
 

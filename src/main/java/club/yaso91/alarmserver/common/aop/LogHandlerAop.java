@@ -2,7 +2,7 @@
  * Copyright(c)2002-2019, 雅俗工作室.
  *    项目名称:alarm_server
  *    文件名称:LogHandlerAop.java
- *    Date:2019/11/25 上午9:32
+ *    Date:2019/11/25 下午1:39
  *    Author:Yaso
  */
 package club.yaso91.alarmserver.common.aop;
@@ -38,7 +38,8 @@ public class LogHandlerAop {
     /**
      * service层更新切入点
      */
-    @Pointcut(value = "execution(public * club.yaso91.alarmserver.service.*.update*(..))")
+    @Pointcut(value = "!execution(void club.yaso91.alarmserver.service.AlarmStateService.updateAlarmInfo())" +
+            "&& execution(public * club.yaso91.alarmserver.service.*.update*(..))")
     public void dbUpdatePc() {
     }
 
@@ -48,6 +49,7 @@ public class LogHandlerAop {
     @Pointcut(value = "execution(public * club.yaso91.alarmserver.service.*.delete*(..))")
     public void dbDeletePc() {
     }
+
 
     /**
      * 串口状态切入点和通知.
@@ -74,11 +76,14 @@ public class LogHandlerAop {
      * @param jp
      */
     @AfterReturning(value = "dbInsertPc() || dbUpdatePc() || dbDeletePc()", returning = "result")
-    public void logDbInsert(JoinPoint jp, Object result) {
+    public void logDbChange(JoinPoint jp, Object result) {
         String argsStr = "";
         Object[] args = jp.getArgs();
         for (Object arg : args) {
             argsStr += arg.toString();
+        }
+        if (result == null) {
+            result = "";
         }
         log.info("数据库改变日志: -- method signature:{},args:{},result:{}.", jp.getSignature().toString(), argsStr,
                 result.toString());

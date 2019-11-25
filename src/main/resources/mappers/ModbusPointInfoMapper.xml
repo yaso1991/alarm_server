@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright(c)2002-2019, 雅俗工作室.
+  ~    项目名称:alarm_server
+  ~    文件名称:ModbusPointInfoMapper.xml
+  ~    Date:2019/11/25 下午1:39
+  ~    Author:Yaso
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="club.yaso91.alarmserver.mapper.ModbusPointInfoMapper">
     <resultMap id="advModbusPointInfo" type="club.yaso91.alarmserver.domain.ModbusPointInfo">
@@ -6,7 +14,7 @@
         <result property="name" column="name"/>
         <result property="code" column="code"/>
         <result property="count" column="count"/>
-        <result property="deviceId" column="device_id"/>
+        <result property="deviceId" column="device_addr"/>
         <result property="ref" column="ref"/>
         <association property="comInfo" javaType="club.yaso91.alarmserver.domain.ComInfo">
             <id property="id" column="c_id"/>

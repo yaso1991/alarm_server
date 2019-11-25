@@ -2,7 +2,7 @@
  * Copyright(c)2002-2019, 雅俗工作室.
  *    项目名称:alarm_server
  *    文件名称:ControllerHandlerAOP.java
- *    Date:2019/11/22 下午3:33
+ *    Date:2019/11/25 下午1:39
  *    Author:Yaso
  */
 
@@ -18,12 +18,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
-
 
 /**
  * 异常统一处理和异常日志记录切面.
+ *
  * @author 晓风轻 (Yaso改)
  * @date: 2019-11-22 14:51
  */
@@ -35,31 +33,21 @@ public class ControllerHandlerAOP {
     /**
      * controller切入点.
      */
-    @Pointcut(value = " execution(public * club.yaso91.alarmserver.controller.*.*(..))")
-    public void pc() {}
+    @Pointcut(value = "execution(public * club.yaso91.alarmserver.controller.*.*(..))")
+    public void pc() {
+    }
 
     /**
-     * 性能日志记录.
+     * 异常统一处理
+     *
      * @param pjp
      * @return
      */
     @Around(value = "pc()")
     public Object handlerControllerMethod(ProceedingJoinPoint pjp) {
-//        ResultBean<?> result;
-//        try {
-//            long startTime = System.currentTimeMillis();
-//            result = (ResultBean<?>) pjp.proceed();
-//            long elapsedTime = System.currentTimeMillis() - startTime;
-//            log.info("[{}]use time: {}", pjp.getSignature(), elapsedTime);
-//        } catch (Throwable e) {
-//            result = handlerException(pjp, e);
-//        }
-//        return result;
-
         Object proceed = null;
         try {
-          proceed   = pjp.proceed();
-
+            proceed = pjp.proceed();
         } catch (Throwable e) {
             handlerException(pjp, e);
         }
@@ -81,8 +69,8 @@ public class ControllerHandlerAOP {
         if (e instanceof RuntimeException || e instanceof IllegalArgumentException) {
             log.error("--------------------------->>");
             log.error(e.toString());
-            List<StackTraceElement> stackTraceElements = Arrays.asList(e.getStackTrace());
-            for (StackTraceElement stackTraceElement: stackTraceElements) {
+            StackTraceElement[] stackTraceElements = e.getStackTrace();
+            for (StackTraceElement stackTraceElement : stackTraceElements) {
                 log.error(stackTraceElement.toString());
             }
             result.setMsg(e.getLocalizedMessage());
@@ -98,7 +86,7 @@ public class ControllerHandlerAOP {
             result.setMsg("NO PERMISSION");
             result.setCode(ResultBean.NO_PERMISSION);
         }
-        // TODO 未知的异常，应该格外注意，可以发送邮件通知等
+        // TODO 未知的异常，应该格外注意，发送邮件通知
         else {
             log.error(pjp.getSignature() + " error ", e);
             result.setMsg(e.toString());
