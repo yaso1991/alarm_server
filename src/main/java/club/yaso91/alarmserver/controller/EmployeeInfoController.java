@@ -1,9 +1,9 @@
-/**
- * projectName: alarmserver
- * fileName: EmployeeInfoController.java
- * packageName: club.yaso91.alarmserver.controller
- * date: 2019-10-10 16:27
- * copyright(c) 2017-2020 FuYun design studio.
+/*
+ * Copyright(c)2002-2019, 雅俗工作室.
+ *    项目名称:alarm_server
+ *    文件名称:EmployeeInfoController.java
+ *    Date:2019/11/25 上午9:32
+ *    Author:Yaso
  */
 package club.yaso91.alarmserver.controller;
 
@@ -40,12 +40,12 @@ public class EmployeeInfoController {
 
     @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
     public boolean addEmployee(@RequestBody Employee employee) {
-        return employeeInfoService.addEmployee(employee);
+        return employeeInfoService.insertEmployee(employee);
     }
 
     @RequestMapping(value = "/fixEmployee", method = RequestMethod.POST)
     public boolean fixEmployee(@RequestBody Employee employee) {
-        return employeeInfoService.fixEmployee(employee);
+        return employeeInfoService.updateEmployee(employee);
     }
 
     @RequestMapping(value = "deleteEmployees", method = RequestMethod.POST)

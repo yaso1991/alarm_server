@@ -1,9 +1,9 @@
-/**
- * projectName: alarmserver
- * fileName: AlarmInfoController.java
- * packageName: club.yaso91.alarmserver.controller
- * date: 2019-10-05 16:19
- * copyright(c) 2017-2020 FuYun design studio.
+/*
+ * Copyright(c)2002-2019, 雅俗工作室.
+ *    项目名称:alarm_server
+ *    文件名称:AlarmInfoController.java
+ *    Date:2019/11/25 上午9:32
+ *    Author:Yaso
  */
 package club.yaso91.alarmserver.controller;
 
@@ -39,7 +39,7 @@ public class AlarmInfoController {
     }
     @RequestMapping(value = "/addAlarmInfo",method = RequestMethod.POST)
     public boolean addAlarmInfo(@RequestBody AlarmInfo alarmInfo) {
-        return alarmInfoService.addAlarmInfo(alarmInfo);
+        return alarmInfoService.insertAlarmInfo(alarmInfo);
     }
 
     @RequestMapping("/loadCardReadersData")
@@ -49,7 +49,7 @@ public class AlarmInfoController {
 
     @RequestMapping(value="/fixAlarmInfo",method = RequestMethod.POST)
     public boolean fixAlarmInfo(@RequestBody AlarmInfo alarmInfo) {
-        return alarmInfoService.fixAlarmInfo(alarmInfo);
+        return alarmInfoService.updateAlarmInfo(alarmInfo);
     }
 
     @RequestMapping(value = "/deleteAlarmInfos",method = RequestMethod.POST)

@@ -2,7 +2,7 @@
  * Copyright(c)2002-2019, 雅俗工作室.
  *    项目名称:alarm_server
  *    文件名称:EmployeeInfoService.java
- *    Date:2019/11/17 上午11:13
+ *    Date:2019/11/25 上午9:32
  *    Author:Yaso
  */
 package club.yaso91.alarmserver.service;
@@ -31,11 +31,11 @@ public class EmployeeInfoService {
         return employeeInfoMapper.selectAll();
     }
 
-    public boolean addEmployee(Employee employee) {
+    public boolean insertEmployee(Employee employee) {
         return employeeInfoMapper.insertEmployee(employee) == 1;
     }
 
-    public boolean fixEmployee(Employee employee) {
+    public boolean updateEmployee(Employee employee) {
         return employeeInfoMapper.updateEmployee(employee) == 1;
     }
 
